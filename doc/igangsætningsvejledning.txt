@@ -9,7 +9,7 @@ Igangsætningsvejledning:
 1 propertyfil:licensemodule.properties - skal være på classpath. På linux i brugeres home-directoru
 2 tomcat-filer: context.xml.default og licensemodule.log4j.xml - optionelt. Kan ændre lognings-niveau runtime.
    
-licensemodule.log4j.xml - til TOMCAT_HOME/conf
+licensemodule.log4j.xml - til ${user.home}/conf
 context.xml.default   - TOMCAT_HOME/conf/Catalina/localhost/context.xml.default   
 licensemodule_h2storage.h2.db  - kopieres til den definerede mappe i licensemodule.properties.
  

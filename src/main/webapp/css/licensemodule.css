@@ -1,0 +1,148 @@
+body{
+    padding: 0 1em 1em;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+a {
+    color: #002299;
+}
+
+a:hover {
+    color: #000066;
+}
+
+table {
+    clear: both;
+}
+
+.well {
+    background-color: #F0F0F0;
+    overflow: hidden;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+    color: #333333;
+}
+
+
+.nav > li > a{
+    color: #999999;
+}
+
+.btn-primary{
+    margin-right: .5em;
+}
+
+.btn-delete{
+    background-image: linear-gradient(to bottom, #cc0000, #aa0000);
+    border: 1px solid #990000;
+    margin-left: .5em;
+}
+
+.btn-delete:hover{
+    background-color: #aa0000;
+}
+
+.inputError{
+    color: #EE0000;
+    font-size: 115%;
+    padding: 0.5em 0 1em;
+}
+
+.infoGroup{
+    float: left;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.inputGroup{
+    float: left;
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
+
+.inputGroup.from{
+    margin-right: 0em;
+}
+
+.table tbody tr.error td {
+    background-color: #FFFFFF;
+}
+
+.table tbody tr.error td:hover, .table-hover tbody tr.error:hover td {
+    background-color: #F6F6F6;
+}
+
+.table-condensed th, .table-condensed td {
+    padding: 8px 5px;
+}
+
+select, textarea, input[type="text"]{
+    margin-bottom: 0px;
+}
+
+#list_licenses .table tbody tr td:hover,#list_licenses .table-hover tbody tr:hover td{
+    cursor: pointer;
+}
+
+#access .table tbody tr.success td.attributeGroup,#access .table tbody tr.error td.attributeGroup{
+    font-size: 1.6em;
+    font-weight: bold;
+    padding-left: 0.5em;
+    vertical-align: middle;
+}
+
+#access .table tr th.attributeGroup,
+#access .table tbody tr.success td.attributeGroup, #access .table tbody tr.success td.attributeGroup{
+    width: 5em;
+}
+
+#access .table tr th.attribute,
+#access .table tbody tr.success td.attribute, #access .table tbody tr.success td.attribute{
+    width: 24em;
+}
+
+#access_who .table tr th.domsGroups,
+#access_who .table tbody tr.success td.domsGroups, #access_who .table tbody tr.error td.domsGroups{
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    padding-right: 1em;
+    width: 21em;
+}
+
+#access_who .table tbody td.allowedGroups{
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+}
+
+#access_who .table tbody td.allowedGroups label{
+    float: left;
+    margin-right: 2em;
+}
+
+#list_configured_grouptypes .mustGroup{
+    width: 8em;
+}
+
+#list_configured_grouptypes .id{
+    width: 4em;
+}
+
+.newPresentationGroup .help-inline, .newPresentationGroup label, .newPresentationGroup input[class*="span"] {
+    float: left;
+    line-height: 2.2em;
+    margin-right: .5em;
+}
+
+.newPresentationGroup .checkbox{
+    margin-right: .5em;
+}
+
+.newPresentationGroup .checkbox input[type="checkbox"] {
+    margin: 0.6em 0.2em;
+}
+
+
