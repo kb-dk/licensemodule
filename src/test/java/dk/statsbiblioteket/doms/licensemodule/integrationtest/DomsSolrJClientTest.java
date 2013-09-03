@@ -12,8 +12,8 @@ import dk.statsbiblioteket.doms.licensemodule.solr.DomsSolrJClient;
 //Integration test. Run manually
 public class DomsSolrJClientTest {
 
-	//private static SolrServer solrServer = new HttpSolrServer("http://localhost:57308/doms/sbsolr");
-	private static HttpSolrServer solrServer = new HttpSolrServer("http://mars:57308/doms/sbsolr");
+
+	private static HttpSolrServer solrServer = new HttpSolrServer("http://localhost:57308/doms/sbsolr");
 	
 	
 	public static void main(String[] args) throws Exception{
