@@ -10,13 +10,13 @@ H2StorageTest.java: Unittest of H2Storage
 LicenseValidator.java: Handle all the business logic and validates access 
 LicenseValidatorTest.java: Unittest of LicenseValidator
 LicenseModulePropertiesLoader.java: Load all properties from licensemodule.properties in the /home/user directory
-LicenseModuleResource.java: The REST API interface  The API is shown on server:port/licensemodule/ etc. http://devel06:9612/licensemodule/
+LicenseModuleResource.java: The REST API interface  The API is shown on server:port/licensemodule/ etc. http://localhost:8080/licensemodule/
 Util.java: Various util-methods. Also used by the JSP-pages.
 
 Property-files:
 licensemodule.properties : placed in home/user
-context.xml.default: tomcat configuration
-licensemodule.log4j.xml : tomcat configuration
+context.xml.default: tomcat configuration (optinal)
+licensemodule.log4j.xml : tomcat configuration (optional)
 
 H2-folder:
 licensemodule_h2storage.h2.db : Empty Database with all tables defined.
