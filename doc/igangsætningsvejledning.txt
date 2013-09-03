@@ -1,0 +1,26 @@
+Applikationen har en property-fil der indeholder 3 konfigurationsparametre. DB-folder, DB-backup-folder og evt. URL til en SOLR instans 
+    
+LicenseModule er et Maven projekt der bygger en WAR-fil. Derudover er projektet afhængig af en fil der indeholder database (H2-database)
+samt en property-fil til konfigurering. 
+
+Igangsætningsvejledning:
+
+1 WAR-fil:licensemodule.war  - installeres i Tomcat eller tilsvarende web-server
+1 propertyfil:licensemodule.properties - skal være på classpath. På linux i brugeres home-directoru
+2 tomcat-filer: context.xml.default og licensemodule.log4j.xml - optionelt. Kan ændre lognings-niveau runtime.
+   
+licensemodule.log4j.xml - til TOMCAT_HOME/conf
+context.xml.default   - TOMCAT_HOME/conf/Catalina/localhost/context.xml.default   
+licensemodule_h2storage.h2.db  - kopieres til den definerede mappe i licensemodule.properties.
+ 
+
+ Database-backup:
+ Der er lavet et specielt håndtag til at lave en database-backup, dette gøres med:
+ curl -d "" localhost:8080/licensemodule/services/system/backup_database  (tilret servernavn)
+ Og backup kopien vil ligge i folderen defineret i licensemodule.properties, navnet vil 
+ være <System.currentTimeMillis>.zip. Eksempel 1321363521325.zip
+ Det vil være tilstrækkeligt med database-backup en gang i døgnet, og et evt. datatab vil ikke
+ være kritisk. Data er ikke personfølsomme. Database filen vil kune fylde få MB.
+ 
+
+
