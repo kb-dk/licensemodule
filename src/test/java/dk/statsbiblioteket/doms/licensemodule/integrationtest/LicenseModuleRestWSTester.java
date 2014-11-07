@@ -131,7 +131,8 @@ public class LicenseModuleRestWSTester {
         ids.add("doms_radioTVCollection:uuid:371157ee-b120-4504-bfaf-364c15a4137c");//radio TV        
         ids.add("doms_radioTVCollection:uuid:c3386ed5-9b79-47a2-a648-8de53569e630");//radio TV
 		ids.add("doms_reklamefilm:uuid:35a1aa76-97a1-4f1b-b5aa-ad2a246eeeec"); //reklame
-        input.setIds(ids);
+		ids.add("doms_newspaperCollection:uuid:18709dea-802c-4bd7-98e6-32ca3b285774-segment_6"); //aviser		
+		input.setIds(ids);
 		
 		JAXBContext context = JAXBContext.newInstance(CheckAccessForIdsInputDTO.class);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -232,7 +233,9 @@ public class LicenseModuleRestWSTester {
         ArrayList<String> ids = new ArrayList<String>();        
         ids.add("doms_radioTVCollection:uuid:a5390b1e-69fb-47c7-b23e-7831eb59479d");//radio TV
 		ids.add("doms_reklamefilm:uuid:35a1aa76-97a1-4f1b-b5aa-ad2a246eeeec"); //reklame
-        input.setIds(ids);
+		ids.add("doms_newspaperCollection:uuid:18709dea-802c-4bd7-98e6-32ca3b285774-segment_6"); //Aviser
+        
+		input.setIds(ids);
 	
     	Gson gson = new Gson();    
     	String json = gson.toJson(input);
