@@ -31,7 +31,7 @@ public class DomsSolrJClientTest {
 	//Basically same as method in DomsSolrJClient, but here I use URL to solrserver defined in this test 
     public static ArrayList<String> filterIds(  ArrayList<String> ids, String queryPartAccess) throws Exception{
         solrServer.setRequestWriter(new BinaryRequestWriter()); //To avoid http error code 413/414, due to monster URI. (and it is faster)        
-        String queryPartStr= DomsSolrJClient.makeRecordbaseIdPart(ids);         
+        String queryPartStr= DomsSolrJClient.makeAuthIdPart(ids);         
         
         System.out.println(queryPartStr);  
         SolrQuery query = new SolrQuery( queryPartStr);

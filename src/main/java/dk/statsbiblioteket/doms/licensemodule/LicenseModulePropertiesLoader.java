@@ -16,11 +16,12 @@ public class LicenseModulePropertiesLoader {
 	private static final String H2_DB_FILE_PROPERTY="licensemodule.h2.db.file";
 	private static final String H2_DB_BACKUP_FOLDER_PROPERTY="licensemodule.h2.db.backup.folder";
 	private static final String DOMS_SOLR_SERVER_PROPERTY = "licensemodule.doms.solr.server";
-	
+	private static final String AVISER_SOLR_SERVER_PROPERTY = "licensemodule.aviser.solr.server";
 	
 	public static String DBFILE = null;
 	public static String DBBACKUPFOLDER = null;
 	public static String DOMS_SOLR_SERVER = null;
+	public static String AVISER_SOLR_SERVER = null;
 	
 	static{
 		log.info("Initializing Licensemodule-properties");
@@ -34,7 +35,6 @@ public class LicenseModulePropertiesLoader {
 	}
 		
 	private static void initProperties()  throws Exception{
-
 		String user_home=System.getProperty("user.home");
 		log.info("Load properties: Using user.home folder:" + user_home);
 		InputStreamReader isr = new InputStreamReader(new FileInputStream(new File(user_home,LICENSEMODULE_PROPERTY_FILE)), "ISO-8859-1");
@@ -45,12 +45,13 @@ public class LicenseModulePropertiesLoader {
 
 		DBFILE =serviceProperties.getProperty(H2_DB_FILE_PROPERTY);		
 		DBBACKUPFOLDER =serviceProperties.getProperty(H2_DB_BACKUP_FOLDER_PROPERTY);
+		AVISER_SOLR_SERVER = serviceProperties.getProperty(AVISER_SOLR_SERVER_PROPERTY); 
 		DOMS_SOLR_SERVER = serviceProperties.getProperty(DOMS_SOLR_SERVER_PROPERTY);	
 		
 		log.info("Property:"+ H2_DB_FILE_PROPERTY +" = " + DBFILE );
 		log.info("Property:"+ H2_DB_BACKUP_FOLDER_PROPERTY +" = "+ DBBACKUPFOLDER );
 		log.info("Property:"+ DOMS_SOLR_SERVER_PROPERTY +" = "+ DOMS_SOLR_SERVER);
-		
+		log.info("Property:"+ AVISER_SOLR_SERVER_PROPERTY +" = "+ AVISER_SOLR_SERVER);		
 	}
 	
 }

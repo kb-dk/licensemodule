@@ -33,14 +33,14 @@ public class LicenseModuleRestWSTester {
 
 	public static void main(String[] args) throws Exception {
 		
-		 testValidateAccess();
+		// testValidateAccess();
 		// testGetUserLicenseQuery();
 		//testGetUsersLicenses();
 		//testGetUsersLicensesJSON();
 		//testGetUsersGroups();
-		//testCheckAccessForIds();
+		testCheckAccessForIds();
 		//testCheckAccessForIdsJSON();
-		//testGetUsersGroupsJSON();
+	//	testGetUsersGroupsJSON();
 		//testGetUsersGroupsAndLicensesJSON();
 		}
 	
@@ -125,10 +125,11 @@ public class LicenseModuleRestWSTester {
 	@SuppressWarnings("all")
 	private static void testCheckAccessForIds() throws Exception {
 		CheckAccessForIdsInputDTO input = new CheckAccessForIdsInputDTO();
-		input.setPresentationType("images");
+		input.setPresentationType("Search");
 		input.setAttributes(createUserObjAttributeDTO());
         ArrayList<String> ids = new ArrayList<String>();        
-        ids.add("doms_radioTVCollection:uuid:a5390b1e-69fb-47c7-b23e-7831eb59479d");//radio TV
+        ids.add("doms_radioTVCollection:uuid:371157ee-b120-4504-bfaf-364c15a4137c");//radio TV        
+        ids.add("doms_radioTVCollection:uuid:c3386ed5-9b79-47a2-a648-8de53569e630");//radio TV
 		ids.add("doms_reklamefilm:uuid:35a1aa76-97a1-4f1b-b5aa-ad2a246eeeec"); //reklame
         input.setIds(ids);
 		
@@ -143,7 +144,7 @@ public class LicenseModuleRestWSTester {
 		System.out.println(inputXML);
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
-		WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/licensemodule/services/").build());
+		WebResource service = client.resource(UriBuilder.fromUri("http://devel06:9612/licensemodule/services/").build());
 
 		// Call with XML
 		CheckAccessForIdsOutputDTO output = service.path("checkAccessForIds").type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML).entity(inputXML).post(CheckAccessForIdsOutputDTO.class);
@@ -236,7 +237,7 @@ public class LicenseModuleRestWSTester {
     	Gson gson = new Gson();    
     	String json = gson.toJson(input);
     	System.out.println("input:"+json);    	
-    	String responseJson= HttpClientPoster.postJSON("http://localhost:8080/licensemodule/services/checkAccessForIds", json);
+    	String responseJson= HttpClientPoster.postJSON("http://devel06:9612/licensemodule/services/checkAccessForIds", json);
 		System.out.println("output:"+responseJson);
     	
 	}
@@ -295,7 +296,7 @@ public class LicenseModuleRestWSTester {
     	Gson gson = new Gson();    
     	String json = gson.toJson(input);
     	System.out.println("input:"+json);    	
-    	String responseJson= HttpClientPoster.postJSON("http://localhost:8080/licensemodule/services/getUserGroups", json);
+    	String responseJson= HttpClientPoster.postJSON("http://devel06:9612/licensemodule/services/getUserGroups", json);
 		System.out.println("output:"+responseJson);
     	
 	}
@@ -326,7 +327,22 @@ public class LicenseModuleRestWSTester {
 		values.add("true");
 		values.add("yes");
 		newUserObjAtt.setValues(values);
-		return userObjAttributes;
+		
+		
+		UserObjAttributeDTO newUserObjAtt1 = new UserObjAttributeDTO();
+        userObjAttributes.add(newUserObjAtt1);
+        newUserObjAtt1.setAttribute("mail");
+        ArrayList<String> values1 = new ArrayList<String>();
+        values1.add("SLETsmi@statsbiblioteket.dk");
+        newUserObjAtt1.setValues(values1);
+		        
+        
+        
+        
+        return userObjAttributes;
+		
+		
+		
 	}
 
 	

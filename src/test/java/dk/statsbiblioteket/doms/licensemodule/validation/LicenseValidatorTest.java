@@ -439,22 +439,22 @@ public class LicenseValidatorTest {
 	}
 
 	@Test
-	public void testMakeRecordbaseIdPart() throws Exception {
+	public void testMakeAuthIdPart() throws Exception {
 
 		ArrayList<String> ids = new ArrayList<String>(); 
 		ids.add("testId1");
 		ids.add("testId2");
-		String solrIdsQuery = DomsSolrJClient.makeRecordbaseIdPart(ids);
+		String solrIdsQuery = DomsSolrJClient.makeAuthIdPart(ids);
 		//(recordID:"testId1" OR recordID:"testId2")
-		assertEquals("(recordID:\"testId1\" OR recordID:\"testId2\")", solrIdsQuery); 
+		assertEquals("(authID:\"testId1\" OR authID:\"testId2\")", solrIdsQuery); 
 
 		//prevent Lucene query injection. Remove all " and / from the string
 		ids = new ArrayList<String>(); 
 		ids.add("test\"Id3\\");
 
-		solrIdsQuery = DomsSolrJClient.makeRecordbaseIdPart(ids);	
+		solrIdsQuery = DomsSolrJClient.makeAuthIdPart(ids);	
 		//(recordID:"testog")
-		assertEquals("(recordID:\"testId3\")", solrIdsQuery);					
+		assertEquals("(authID:\"testId3\")", solrIdsQuery);					
 	}
 
 

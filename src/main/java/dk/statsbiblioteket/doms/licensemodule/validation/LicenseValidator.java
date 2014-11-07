@@ -31,6 +31,7 @@ import dk.statsbiblioteket.doms.licensemodule.service.dto.GetUsersLicensesInputD
 import dk.statsbiblioteket.doms.licensemodule.service.dto.UserGroupDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.UserObjAttributeDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.ValidateAccessInputDTO;
+import dk.statsbiblioteket.doms.licensemodule.solr.AviserSolrJClient;
 import dk.statsbiblioteket.doms.licensemodule.solr.DomsSolrJClient;
 
 public class LicenseValidator {
@@ -106,7 +107,22 @@ public class LicenseValidator {
 		output.setPresentationType(input.getPresentationType());
 		output.setQuery(query.getQuery());
 		
-		ArrayList<String> filteredIds = DomsSolrJClient.filterIds(input.getIds(), query.getQuery());
+		//Filter against both Solr servers.
+		ArrayList<String> filteredIdsDoms = DomsSolrJClient.filterIds(input.getIds(), query.getQuery());
+	
+		
+		//TODO Toke+Kåre. Hvis der skal kaldes aviser, så skal denne linie gøres aktiv.
+		//ArrayList<String> filteredIdsAviser = AviserSolrJClient.filterIds(input.getIds(), query.getQuery());
+		ArrayList<String> filteredIdsAviser =  new ArrayList<String>();
+		
+		
+		log.debug("#filtered doms id="+filteredIdsDoms.size());
+		log.debug("#filtered aviser id="+filteredIdsAviser.size());
+		//merge (union) results. No chance of duplicate ids, so we just add all.
+		ArrayList<String> filteredIds = new ArrayList<String>();
+		filteredIds.addAll(filteredIdsDoms);
+		filteredIds.addAll(filteredIdsAviser);
+		
 		output.setAccessIds(filteredIds);		
 		//Sanity check!
 		if (filteredIds.size() > input.getIds().size()){
