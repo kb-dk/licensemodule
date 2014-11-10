@@ -106,8 +106,17 @@ public class LicenseValidator {
 	
 		
 		//TODO Toke+Kåre. Hvis der skal kaldes aviser, så skal denne linie gøres aktiv.
-		//ArrayList<String> filteredIdsAviser = AviserSolrJClient.filterIds(input.getIds(), query.getQuery());
-		ArrayList<String> filteredIdsAviser =  new ArrayList<String>();
+
+
+
+		ArrayList<String> filteredIdsAviser = AviserSolrJClient.filterIds(input.getIds(), query.getQuery());
+
+
+
+
+
+
+		///////ArrayList<String> filteredIdsAviser =  new ArrayList<String>();
 		
 		
 		log.debug("#filtered doms id="+filteredIdsDoms.size());
