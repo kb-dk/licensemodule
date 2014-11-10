@@ -1,12 +1,6 @@
 package dk.statsbiblioteket.doms.licensemodule.validation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -119,11 +113,11 @@ public class LicenseValidator {
 		log.debug("#filtered doms id="+filteredIdsDoms.size());
 		log.debug("#filtered aviser id="+filteredIdsAviser.size());
 		//merge (union) results. No chance of duplicate ids, so we just add all.
-		ArrayList<String> filteredIds = new ArrayList<String>();
+		Set<String> filteredIds = new HashSet<String>();
 		filteredIds.addAll(filteredIdsDoms);
 		filteredIds.addAll(filteredIdsAviser);
 		
-		output.setAccessIds(filteredIds);		
+		output.setAccessIds(new ArrayList<String>(filteredIds));
 		//Sanity check!
 		if (filteredIds.size() > input.getIds().size()){
 			throw new IllegalArgumentException("Security problem: More Id's in output than input. Check for query injection.");
