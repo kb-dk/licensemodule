@@ -3,10 +3,14 @@ package dk.statsbiblioteket.doms.licensemodule;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import dk.statsbiblioteket.doms.licensemodule.solr.SolrServerClient;
 
 public class LicenseModulePropertiesLoader {
 	
@@ -15,15 +19,15 @@ public class LicenseModulePropertiesLoader {
 	 
 	private static final String H2_DB_FILE_PROPERTY="licensemodule.h2.db.file";
 	private static final String H2_DB_BACKUP_FOLDER_PROPERTY="licensemodule.h2.db.backup.folder";
-	private static final String DOMS_SOLR_SERVER_PROPERTY = "licensemodule.doms.solr.server";
-	private static final String AVISER_SOLR_SERVER_PROPERTY = "licensemodule.aviser.solr.server";
+	private static final String SOLR_SERVERS_PROPERTY = "licensemodule.solr.servers";
+	private static final String SOLR_FILTER_FIELD_PROPERTY = "licensemodule.solr.filter.field";
 	
 	public static String DBFILE = null;
 	public static String DBBACKUPFOLDER = null;
-	public static String DOMS_SOLR_SERVER = null;
-	public static String AVISER_SOLR_SERVER = null;
+	public static ArrayList<SolrServerClient> SOLR_SERVERS = null;
+	public static String SOLR_FILTER_FIELD = null;
 	
-	static{
+    public static void init(){
 		log.info("Initializing Licensemodule-properties");
 		try {
 			initProperties();		
@@ -33,7 +37,8 @@ public class LicenseModulePropertiesLoader {
 			log.error("Could not load property file:"+LICENSEMODULE_PROPERTY_FILE);					
 		}
 	}
-		
+ 
+
 	private static void initProperties()  throws Exception{
 		String user_home=System.getProperty("user.home");
 		log.info("Load properties: Using user.home folder:" + user_home);
@@ -45,13 +50,28 @@ public class LicenseModulePropertiesLoader {
 
 		DBFILE =serviceProperties.getProperty(H2_DB_FILE_PROPERTY);		
 		DBBACKUPFOLDER =serviceProperties.getProperty(H2_DB_BACKUP_FOLDER_PROPERTY);
-		AVISER_SOLR_SERVER = serviceProperties.getProperty(AVISER_SOLR_SERVER_PROPERTY); 
-		DOMS_SOLR_SERVER = serviceProperties.getProperty(DOMS_SOLR_SERVER_PROPERTY);	
+		SOLR_FILTER_FIELD = serviceProperties.getProperty(SOLR_FILTER_FIELD_PROPERTY); 
+		 
+		String solr_servers=serviceProperties.getProperty(SOLR_SERVERS_PROPERTY);	
+		StringTokenizer tokens = new StringTokenizer(solr_servers, ",");  
+		SOLR_SERVERS  = new ArrayList<SolrServerClient>(); 
+		
+		while (tokens.hasMoreTokens()){
+		  SOLR_SERVERS.add(new SolrServerClient(tokens.nextToken().trim()));    		   
+		}		
 		
 		log.info("Property:"+ H2_DB_FILE_PROPERTY +" = " + DBFILE );
 		log.info("Property:"+ H2_DB_BACKUP_FOLDER_PROPERTY +" = "+ DBBACKUPFOLDER );
-		log.info("Property:"+ DOMS_SOLR_SERVER_PROPERTY +" = "+ DOMS_SOLR_SERVER);
-		log.info("Property:"+ AVISER_SOLR_SERVER_PROPERTY +" = "+ AVISER_SOLR_SERVER);		
+		log.info("Property:"+ SOLR_FILTER_FIELD_PROPERTY +" = "+  SOLR_FILTER_FIELD);
+	    log.info("Property:"+ SOLR_SERVERS_PROPERTY +" = "+  solr_servers);
+	    log.info("Number of solr servers:"+SOLR_SERVERS.size());
+	    
 	}
+
+    
+    //For unittest
+    public static void setSOLR_FILTER_FIELD(String sOLR_FILTER_FIELD) {
+        SOLR_FILTER_FIELD = sOLR_FILTER_FIELD;
+    }
 	
 }

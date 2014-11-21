@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Attribute;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicenseGroupType;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicensePresentationType;
@@ -18,7 +19,8 @@ import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseContent;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Presentation;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.UserGroupDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.UserObjAttributeDTO;
-import dk.statsbiblioteket.doms.licensemodule.solr.DomsSolrJClient;
+import dk.statsbiblioteket.doms.licensemodule.solr.AbstractSolrJClient;
+
 
 
 public class LicenseValidatorTest {
@@ -32,6 +34,7 @@ public class LicenseValidatorTest {
 		//Create database before unittests. Only do in start of test  all tests only load data.   
 		H2StorageTest.beforeClass();
 		H2StorageTest.insertDefaultConfigurationTypes();
+	    LicenseModulePropertiesLoader.setSOLR_FILTER_FIELD("authID"); 
 	}
 
 	@Test
@@ -444,16 +447,15 @@ public class LicenseValidatorTest {
 		ArrayList<String> ids = new ArrayList<String>(); 
 		ids.add("testId1");
 		ids.add("testId2");
-		String solrIdsQuery = DomsSolrJClient.makeAuthIdPart(ids);
-		//(recordID:"testId1" OR recordID:"testId2")
+		String solrIdsQuery = AbstractSolrJClient.makeAuthIdPart(ids);
 		assertEquals("(authID:\"testId1\" OR authID:\"testId2\")", solrIdsQuery); 
 
 		//prevent Lucene query injection. Remove all " and / from the string
 		ids = new ArrayList<String>(); 
 		ids.add("test\"Id3\\");
 
-		solrIdsQuery = DomsSolrJClient.makeAuthIdPart(ids);	
-		//(recordID:"testog")
+		solrIdsQuery = AbstractSolrJClient.makeAuthIdPart(ids);	
+		
 		assertEquals("(authID:\"testId3\")", solrIdsQuery);					
 	}
 

@@ -7,13 +7,13 @@ import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-import dk.statsbiblioteket.doms.licensemodule.solr.DomsSolrJClient;
+import dk.statsbiblioteket.doms.licensemodule.solr.AbstractSolrJClient;
 
 //Integration test. Run manually
 public class DomsSolrJClientTest {
 
 
-	private static HttpSolrServer solrServer = new HttpSolrServer("http://localhost:57308/doms/sbsolr");
+	private static HttpSolrServer solrServer = new HttpSolrServer("http://mars:57308/doms/sbsolr/");
 	
 	
 	public static void main(String[] args) throws Exception{
@@ -31,7 +31,7 @@ public class DomsSolrJClientTest {
 	//Basically same as method in DomsSolrJClient, but here I use URL to solrserver defined in this test 
     public static ArrayList<String> filterIds(  ArrayList<String> ids, String queryPartAccess) throws Exception{
         solrServer.setRequestWriter(new BinaryRequestWriter()); //To avoid http error code 413/414, due to monster URI. (and it is faster)        
-        String queryPartStr= DomsSolrJClient.makeAuthIdPart(ids);         
+        String queryPartStr= AbstractSolrJClient.makeAuthIdPart(ids);         
         
         System.out.println(queryPartStr);  
         SolrQuery query = new SolrQuery( queryPartStr);
@@ -40,7 +40,7 @@ public class DomsSolrJClientTest {
         query.set("facet", "false");
         query.setRows(ids.size());
         QueryResponse response = solrServer.query(query);
-        ArrayList<String> filteredIds = DomsSolrJClient.getIdsFromResponse(response);
+        ArrayList<String> filteredIds = AbstractSolrJClient.getIdsFromResponse(response);
         return filteredIds;     
     }
 	

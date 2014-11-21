@@ -25,6 +25,8 @@ public class InitializationContextListener implements ServletContextListener {
 			String version = props.getProperty("APPLICATION.VERSION");
 			log.info("Licensemodule version "+version+" started successfully");
 			
+			 LicenseModulePropertiesLoader.init(); //Load properties
+			
 		} catch (Exception e) {
 			log.error("failed to initialize service", e);
 			throw new RuntimeException("failed to initialize service", e);

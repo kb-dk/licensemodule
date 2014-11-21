@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 import dk.statsbiblioteket.doms.licensemodule.Util;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Attribute;
 import dk.statsbiblioteket.doms.licensemodule.persistence.AttributeGroup;
@@ -25,13 +26,11 @@ import dk.statsbiblioteket.doms.licensemodule.service.dto.GetUsersLicensesInputD
 import dk.statsbiblioteket.doms.licensemodule.service.dto.UserGroupDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.UserObjAttributeDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.ValidateAccessInputDTO;
-import dk.statsbiblioteket.doms.licensemodule.solr.AviserSolrJClient;
-import dk.statsbiblioteket.doms.licensemodule.solr.DomsSolrJClient;
+import dk.statsbiblioteket.doms.licensemodule.solr.SolrServerClient;
 
 public class LicenseValidator {
 
-	private static final Logger log = LoggerFactory.getLogger(LicenseValidator.class);	
-	
+	private static final Logger log = LoggerFactory.getLogger(LicenseValidator.class);		
 	public static final String LOCALE_DA = "da";
 	public static final String LOCALE_EN = "en";
 	public static final String NO_ACCESS = "(recordID:NoAccess)";
@@ -100,38 +99,27 @@ public class LicenseValidator {
 		CheckAccessForIdsOutputDTO output = new  CheckAccessForIdsOutputDTO();
 		output.setPresentationType(input.getPresentationType());
 		output.setQuery(query.getQuery());
-		
-		//Filter against both Solr servers.
-		ArrayList<String> filteredIdsDoms = DomsSolrJClient.filterIds(input.getIds(), query.getQuery());
+
+		ArrayList<SolrServerClient> servers = LicenseModulePropertiesLoader.SOLR_SERVERS;
 	
+		  // merge (union) results.   
+        Set<String> filteredIdsSet = new HashSet<String>();
 		
-		//TODO Toke+Kåre. Hvis der skal kaldes aviser, så skal denne linie gøres aktiv.
-
-
-
-		ArrayList<String> filteredIdsAviser = AviserSolrJClient.filterIds(input.getIds(), query.getQuery());
-
-
-
-
-
-
-		///////ArrayList<String> filteredIdsAviser =  new ArrayList<String>();
-		
-		
-		log.debug("#filtered doms id="+filteredIdsDoms.size());
-		log.debug("#filtered aviser id="+filteredIdsAviser.size());
-		//merge (union) results. No chance of duplicate ids, so we just add all.
-		Set<String> filteredIds = new HashSet<String>();
-		filteredIds.addAll(filteredIdsDoms);
-		filteredIds.addAll(filteredIdsAviser);
-		
-		output.setAccessIds(new ArrayList<String>(filteredIds));
+		//Next step: use Future's to make multithreaded when we get more servers. 
+		//But currently these requests are less 10 ms
+		for (SolrServerClient server: servers){
+	        ArrayList<String> filteredIds =server.filterIds(input.getIds(), query.getQuery());
+	        log.debug("#filtered id for server "+server.getSolrServer().getBaseURL() +" : "+filteredIds.size());
+		    filteredIdsSet.addAll(filteredIds);
+		}
+				
+		output.setAccessIds(new ArrayList<String>(filteredIdsSet));
 		//Sanity check!
-		if (filteredIds.size() > input.getIds().size()){
+		if (filteredIdsSet.size() > input.getIds().size()){
 			throw new IllegalArgumentException("Security problem: More Id's in output than input. Check for query injection.");
 		}
 		
+		log.debug("#query ID:"+input.getIds().size() + " #filtered IDs:"+filteredIdsSet.size());
 		return output;		
 	}
 

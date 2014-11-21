@@ -323,6 +323,7 @@ public class LicenseModuleRestWSTester {
 	
 	private static ArrayList<UserObjAttributeDTO> createUserObjAttributeDTO() {
 		ArrayList<UserObjAttributeDTO> userObjAttributes = new ArrayList<UserObjAttributeDTO>();
+	
 		UserObjAttributeDTO newUserObjAtt = new UserObjAttributeDTO();
 		userObjAttributes.add(newUserObjAtt);
 		newUserObjAtt.setAttribute("attribut_store.MediestreamFullAccess");
@@ -336,10 +337,15 @@ public class LicenseModuleRestWSTester {
         userObjAttributes.add(newUserObjAtt1);
         newUserObjAtt1.setAttribute("mail");
         ArrayList<String> values1 = new ArrayList<String>();
-        values1.add("SLETsmi@statsbiblioteket.dk");
+        values1.add("mvk@statsbiblioteket.dk");
         newUserObjAtt1.setValues(values1);
 		        
-        
+        UserObjAttributeDTO newUserObjAtt2 = new UserObjAttributeDTO();
+        userObjAttributes.add(newUserObjAtt2);
+        newUserObjAtt2.setAttribute("SBIPRoleMapper");
+        ArrayList<String> values2 = new ArrayList<String>();
+        values2.add("aucampus");
+        newUserObjAtt2.setValues(values2);
         
         
         return userObjAttributes;

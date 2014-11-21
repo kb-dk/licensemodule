@@ -340,8 +340,7 @@ public class ConfigurationServlet extends HttpServlet {
 
 		try{
 			CheckAccessForIdsOutputDTO output = LicenseValidator.checkAccessForIds(input);
-			infoMessage.append("Detaljer: \n");
-			infoMessage.append("DOMS Solr server:"+LicenseModulePropertiesLoader.DOMS_SOLR_SERVER+  "\n");			
+			infoMessage.append("Detaljer: \n");			
 			infoMessage.append("Presentationtype:"+output.getPresentationType() +" \n");
 			infoMessage.append("Access query part:"+output.getQuery() +" \n");
 			infoMessage.append("#Ids:"+output.getAccessIds().size() +" \n");
