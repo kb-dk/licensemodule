@@ -112,10 +112,12 @@ public class LicenseValidator {
 	        log.debug("#filtered id for server "+server.getSolrServer().getBaseURL() +" : "+filteredIds.size());
 		    filteredIdsSet.addAll(filteredIds);
 		}
-				
+		//Now we have to remove remove ID's not asked for that are here because of multivalue field. (set intersection)
+	    filteredIdsSet.retainAll(input.getIds());
+						
 		output.setAccessIds(new ArrayList<String>(filteredIdsSet));
 		//Sanity check!
-		if (filteredIdsSet.size() > input.getIds().size()){
+		if (output.getAccessIds().size() > input.getIds().size()){
 			throw new IllegalArgumentException("Security problem: More Id's in output than input. Check for query injection.");
 		}
 		

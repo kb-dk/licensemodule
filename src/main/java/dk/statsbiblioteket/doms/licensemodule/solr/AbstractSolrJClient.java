@@ -1,6 +1,7 @@
 package dk.statsbiblioteket.doms.licensemodule.solr;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -73,8 +74,10 @@ public class AbstractSolrJClient {
         ArrayList<String> ids= new ArrayList<String>();
 
         for (SolrDocument current : response.getResults()){
-            String id = current.getFieldValue(filterField).toString();
-            ids.add(id);
+             Collection<Object> fieldValues = current.getFieldValues(filterField); //Multivalued
+             for (Object idFound : fieldValues){
+                 ids.add(idFound.toString());                 
+             }                           
         }   
         return ids;
     }
