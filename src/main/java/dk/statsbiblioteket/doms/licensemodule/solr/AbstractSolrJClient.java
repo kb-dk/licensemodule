@@ -40,7 +40,7 @@ public class AbstractSolrJClient {
         SolrQuery query = new SolrQuery( queryStr);        
         query.setFilterQueries(queryPartAccess);
         query.setFields();
-        query.setRows(ids.size()); //default is 10 rows and id-list can be 20 etcs             
+        query.setRows(9000); //Powerrating... each page can have max 200 segments (rare).. with 20 pages query this is 4000..               
         query.set("facet", "false"); //  Must be parameter set, because this java method does NOT work: query.setFacet(false);   
        
         QueryResponse response = solrServer.query(query);
