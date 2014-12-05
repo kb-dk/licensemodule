@@ -121,7 +121,7 @@ public class LicenseValidator {
 			throw new IllegalArgumentException("Security problem: More Id's in output than input. Check for query injection.");
 		}
 		
-		log.debug("#query ID:"+input.getIds().size() + " #filtered IDs:"+filteredIdsSet.size());
+		log.debug("#query IDs="+input.getIds().size() + " returned #filtered IDs="+output.getAccessIds().size());
 		return output;		
 	}
 
