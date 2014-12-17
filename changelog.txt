@@ -1,0 +1,100 @@
+v.1.7 12/17/2014
+
+Licensemodule now integrate to multiple solr servers.
+
+Two new properties:
+# URL to the Solr instances.Comma seperated
+licensemodule.solr.servers = http://mars:57308/doms/sbsolr/ , http://mars:56708/aviser/sbsolr/
+
+# The solr schema field to perform id filtering.
+licensemodule.solr.filter.field = authID
+
+
+v.1.6 29/7/2013
+For at undgå SOLR-serveren's tomcat smidder HTTP 413/414 (for lange POST request URI) benyttes binær SOLR-protocol i stedet til
+kommunikation fra licensemodulet mod SOLR.
+
+
+v.1.5 19/06/2013:
+Empty query strings for "pakker" allowed and are ignored
+Query-string for pakke tillader nu 2048 tegn
+
+Database tabel-felt ændring:
+Kopier h2-1.3.170.jar filen over på serveren et sted (her i licmod brugerens home)
+
+Luk webserver
+Connect til databasen og lav felt-rettelse:
+
+java -cp /home/licmod/h2-1.3.170.jar  org.h2.tools.Shell -url jdbc:h2:/home/licmod/licensemodule_h2storage/licensemodule_h2storage
+(det sidste er stien til hvor storage-filen ligger. Bemærk .h2.db delen af filen udelades) 
+
+SHOW TABLES;  (sanity check, her skal gerne blive listet 9 tabeller)
+ALTER TABLE GROUPTYPES ALTER QUERYSTRING VARCHAR(2048);
+COMMIT;
+QUIT;
+
+Start webserver
+
+
+
+v.1.4 29/05/2013:
+Solr: licensbegræsnings sættes nu som filter og ikke som del af query.
+Monitoring: webside med bl.a. optælling indgående WS kald til hvilke methoder.
+Maven dependency: SBUtil
+
+v.1.3 23/05/2013:
+Solr fix: NoAccess:NoAccess rettet til recordID:NoAccess
+Locale fix: getUserGroupsAndLicenses benytter nu locale korrekt
+
+
+v.1.2 27/02/2013: 
+Kald af SOLR-server + SOLR server-property.
+Diverse databaseændringer
+WS metoder udstillet som JSON.
+
+v.1.1 27/02/2013: 
+Fix af DB-backup.
+
+v.1.0 26/02/2013: Initielt release.
+ 
+Se  også igangsætningsbeskrivelse.
+Releasen indeholder:
+1 WAR-fil:licensemodule.war
+1 propertyfil:licensemodule.properties
+2 tomcat-filer: context.xml.default og licensemodule.log4j.xml
+1 h2-database fil:licensemodule_h2storage.h2.db
+1 changelog fil: changelog.txt
+1 Idriftsættelse/igangsættelse fil: igangsætningsbeskrivelse.txt
+
+ 
+Igangsætningsvejledning:
+
+Alle filer til første igangsætning findes i: licmod@devel06:/home/licmod/releases/licensemodule/version-1.0/
+
+licensemodule.war: installeres i tomcat.
+licensemodule.properties , til /home/licmod  (tilret h2-database file lokationen til stage miljøet)   
+licensemodule.log4j.xml, til /home/licmod/services/conf
+context.xml.default til TOMCAT_HOME/conf/Catalina/localhost/context.xml.default   
+licensemodule_h2storage.h2.db  til den definerede mappe i licensemodule.properties. 
+
+Husk at definere useBodyEncodingForURI="true"  i server.xml: ...<Connector port="xxxx" protocol="HTTP/1.1" connectionTimeout="20000" useBodyEncodingForURI="true" />...
+
+
+ Database-backup:
+ Der er lavet et specielt håndtag til at lave en database-backup, dette gøres med:
+ curl -d "" localhost:8080/licensemodule/services/system/backup_database  (tilret servernavn)
+ Og backup kopien vil ligge i folderen defineret i licensemodule.properties, navnet vil 
+ være <System.currentTimeMillis>.zip. Eksempel 1321363521325.zip
+ Det vil være tilstrækkeligt med database-backup en gang i døgnet, og et evt. datatab vil ikke
+ være kritisk. Data er ikke personfølsomme. Database filen vil kune fylde få MB.
+ 
+
+Ved efterfølgende igangsætninger:
+Leverancerne vil blive leveret i mappen: licmod@devel06:/home/licmod/releases/licensemodule/version-x.x/
+De vil formodentligt kun være en ny version af WAR-filen
+
+Miljøoversigt:
+ 
+Devel06: http://devel06:9612/licensemodule/ (licmod@devel06)
+Stage: http://stage06/licensemodule/ (develro@stage06)
+Prod:  http://samling.statsbiblioteket.dk/licensemodule/    (develro@deneb)
