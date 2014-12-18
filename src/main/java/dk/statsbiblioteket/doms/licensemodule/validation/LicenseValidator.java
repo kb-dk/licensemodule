@@ -89,6 +89,10 @@ public class LicenseValidator {
 	//TODO shitload of javadoc
 	public static CheckAccessForIdsOutputDTO checkAccessForIds(CheckAccessForIdsInputDTO input) throws Exception{
        
+	    if  (input.getIds() == null || input.getIds().size() == 0){
+	        throw new IllegalArgumentException("No ID's in input");	        
+	    }
+	    
 		//Get the query. This also validates the input 
 		GetUserQueryInputDTO inputQuery = new GetUserQueryInputDTO();		
 		inputQuery.setAttributes(input.getAttributes());
