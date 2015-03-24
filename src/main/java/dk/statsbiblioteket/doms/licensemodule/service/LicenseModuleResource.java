@@ -82,7 +82,8 @@ public class LicenseModuleResource {
 			CheckAccessForIdsOutputDTO output = LicenseValidator.checkAccessForIds(input);			 		
 	        return output;
 		} catch (Exception e) {
-			throw handleServiceExceptions(e);
+			log.error("Error in checkAccessForIds:",e);
+		    throw handleServiceExceptions(e);
 		}			
 	}		
 	
