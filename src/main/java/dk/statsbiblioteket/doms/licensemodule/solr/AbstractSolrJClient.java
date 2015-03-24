@@ -7,11 +7,13 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 
 public class AbstractSolrJClient {
-
+    private static final Logger log = LoggerFactory.getLogger(AbstractSolrJClient.class);
     private static String filterField;
     protected HttpSolrServer solrServer;
     static{ 
@@ -35,15 +37,17 @@ public class AbstractSolrJClient {
             return new ArrayList<String>();
         }
 
-        String queryStr= makeAuthIdPart(ids);
- 
+        String queryStr= makeAuthIdPart(ids); 
+        log.debug("query:"+queryStr);
+        
         SolrQuery query = new SolrQuery( queryStr);        
         query.setFilterQueries(queryPartAccess);
+        log.debug("filter:"+queryPartAccess);
+        
         query.setFields(filterField); //only this field is used from resultset
         query.setRows(9000); //Powerrating... each page can have max 200 segments (rare).. with 20 pages query this is 4000..               
-        query.set("facet", "false"); //  Must be parameter set, because this java method does NOT work: query.setFacet(false);   
-       
-        QueryResponse response = solrServer.query(query);
+        query.set("facet", "false"); //  Must be parameter set, because this java method does NOT work: query.setFacet(false);          
+        QueryResponse response = solrServer.query(query);        
         ArrayList<String> filteredIds = getIdsFromResponse(response);
 
         return filteredIds;

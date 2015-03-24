@@ -1,5 +1,9 @@
-v.1.7 12/17/2014
+v.2.1: 2015-03-14
+Validation exception instead of nullpointer if ID input-list is null
+log.debug/info changes 
 
+
+v.2.0 12/17/2014
 Licensemodule now integrate to multiple solr servers.
 
 Two new properties:
