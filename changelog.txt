@@ -1,6 +1,6 @@
 v.2.2: 2015-08-xx
 DB migration H2-> Postgres
-Various refactoring of facade/DB layer, seperation. 
+Various refactoring of facade/DB layer, separation. 
 Upgrade to java 8 + Tomcat 8
 
 
