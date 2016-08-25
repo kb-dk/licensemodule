@@ -5,7 +5,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -15,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import dk.statsbiblioteket.doms.licensemodule.Util;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.GetUserGroupsInputDTO;
@@ -30,60 +37,113 @@ import dk.statsbiblioteket.doms.licensemodule.validation.LicenseValidator;
  * Each test-method will delete all entries in the database, but keep the database tables.
  * 
  * Currently the directory is not deleted after the tests have run. This is useful as you can
- * open at checke the database and see what the unit-tests did.
+ * open and open the database and see what the unit-tests did.
  */
 
-public class H2StorageTest {
+public class LicenseModuleStorageTest {
 
-	private static final Logger log = LoggerFactory.getLogger(H2StorageTest.class);
-	private static final String DB_TEMP_DIR = "target/h2";
-	private static final String DB_FILE = DB_TEMP_DIR + "/licensemodule_h2storage";
+	private static final Logger log = LoggerFactory.getLogger(LicenseModuleStorageTest.class);
+	
+    private static final String DRIVER = "org.h2.Driver";
+    private static final String URL = "jdbc:h2:target/test-classes/h2/licensemodule";
+    private static final String USERNAME = "";
+    private static final String PASSWORD = "";
+
 	private static final String CREATE_TABLES_DDL_FILE = "src/test/resources/H2_DDL_scripts/dom_licensemodule_create_db.ddl";
-	private static final String DELETE_FROM_TABLES_DDL_FILE = "src/test/resources/H2_DDL_scripts/delete_from_all_tables.ddl";
+	private static final String DELETE_TABLES_DDL_FILE = "src/test/resources/H2_DDL_scripts/delete_from_all_tables.ddl";
 	private static final String INSERT_DEFAULT_CONFIGURATION_DDL_FILE = "src/test/resources/H2_DDL_scripts/dom_licensemodule_default_configuration.ddl";
-	private static H2Storage storage = null;
+	private static LicenseModuleStorage storage = null;
 
+	
+	
 	/*
 	 * Delete database file if it exists. Create database with tables
 	 */
 
-	@BeforeClass
-	public static void beforeClass() throws Exception {
-		// Nuke DB completely and rebuild it.
-		File db_temp_dir = new File(DB_TEMP_DIR);
-		if (db_temp_dir.exists() && db_temp_dir.isDirectory()) {
-			log.debug("Deleting H2 temp dir:" + db_temp_dir.getAbsolutePath());
-			doDelete(db_temp_dir);
-		}
-		storage = new H2Storage(DB_FILE);
-		File create_ddl_file = new File(CREATE_TABLES_DDL_FILE);
+	 private static void createEmptyDBFromDDL() throws Exception {
+	        //Delete if exists
+	        doDelete(new File("target/test-classes/h2"));
+	        Connection connection = null;
 
-		storage.runDDLScript(create_ddl_file);
+	        try {
+	            Class.forName(DRIVER); // load the driver
+	        } catch (ClassNotFoundException e) {
+	            throw new SQLException(e);
+	        }
+	        connection = DriverManager.getConnection(URL, "", "");
 
-	}
+	        File file = getFile(CREATE_TABLES_DDL_FILE);
+	        log.info("Running DDL script:" + file.getAbsolutePath());
 
-	@AfterClass
-	public static void afterClass() throws Exception {
-		// No reason to delete DB data after test, since we delete it before each test.
-		// This way you can open the DB in a DB-browser after a unittest and see the result.
-		H2Storage.shutdown();
-	}
+	        if (!file.exists()) {
+	            log.error("DDL script not found:" + file.getAbsolutePath());
+	            throw new RuntimeException("DDLscript file not found:" + file.getAbsolutePath());
+	        }
 
-	/*
-	 * Delete data from all tables before each unittest
-	 */
+	        String scriptStatement = "RUNSCRIPT FROM '" + file.getAbsolutePath() + "'";
 
-	@Before
-	public void before() throws Exception {
-		// Nuke all data in DB
-		File delete_ddl_file = new File(DELETE_FROM_TABLES_DDL_FILE);
-		storage.runDDLScript(delete_ddl_file);
-	}
+	        connection.prepareStatement(scriptStatement).execute();
 
-	@After
-	public void after() throws Exception {
-	}
+	        PreparedStatement shutdown = connection.prepareStatement("SHUTDOWN");
+	        shutdown.execute();
+	        connection.close();
+	    }
 
+
+	    @BeforeClass
+	    public static void beforeClass() throws Exception {
+	        LicenseModuleStorage.initialize(DRIVER, URL, USERNAME, PASSWORD);	        
+	        createEmptyDBFromDDL();
+	        System.out.println("created");
+	        
+	    }
+
+	    @AfterClass
+	    public static void afterClass() throws Exception {
+	        // No reason to delete DB data after test, since we delete it before each test.
+	        // This way you can open the DB in a DB-browser after a unittest and see the result.
+	        LicenseModuleStorage.shutdown();
+	    }
+
+	    /*
+	     * Delete data from all tables before each unittest
+	     * TODO remove delete when commit is handled in facade class
+	     */
+
+
+	    @Before
+	    public  void before() throws Exception {	    
+	        Connection connection = null;
+	        try {
+                Class.forName(DRIVER); // load the driver
+            } catch (ClassNotFoundException e) {
+                throw new SQLException(e);
+            }
+            connection = DriverManager.getConnection(URL, "", "");
+	        
+	        File file = getFile(DELETE_TABLES_DDL_FILE);
+            log.info("Running DDL script:" + file.getAbsolutePath());
+
+            if (!file.exists()) {
+                log.error("DDL script not found:" + file.getAbsolutePath());
+                throw new RuntimeException("DDLscript file not found:" + file.getAbsolutePath());
+            }
+
+            String scriptStatement = "RUNSCRIPT FROM '" + file.getAbsolutePath() + "'";
+
+            connection.prepareStatement(scriptStatement).execute();
+
+	        
+	        storage = new LicenseModuleStorage();
+	    }
+
+	    @After
+	    public void after() throws Exception {
+	        storage.rollback();
+	        storage.close();
+	    }
+
+	
 	public static void insertDefaultConfigurationTypes() throws Exception {
 		File insert_ddl_file = new File(INSERT_DEFAULT_CONFIGURATION_DDL_FILE);
 		storage.runDDLScript(insert_ddl_file);
@@ -401,31 +461,7 @@ public class H2StorageTest {
 		assertEquals(1, licenses.size());
 	}
 
-	@Test
-	public void testDatabaseBackup() throws Exception {
-
-		// Make backup
-		String dbFile = "target/h2/backups/" + System.currentTimeMillis() + ".zip";
-		storage.backupDatabase(dbFile);
-
-		log.info("created DB backup");
-		// test file exists
-		File dbFileBackup = new File(dbFile);
-		assertTrue(dbFileBackup.exists());
-		assertTrue(dbFileBackup.length() > 0);
-	}
-
-	// file.delete does not work for a directory unless it is empty. hence this method
-	private static void doDelete(File path) throws IOException {
-		if (path.isDirectory()) {
-			for (File child : path.listFiles()) {
-				doDelete(child);
-			}
-		}
-		if (!path.delete()) {
-			throw new IOException("Could not delete " + path);
-		}
-	}
+	
 
 	// This License is used for most unittests, so it is important to understand the object tree.
 	public static License createTestLicenseWithAssociations(long id) {
@@ -513,7 +549,7 @@ public class H2StorageTest {
 	public void testGetUserGroupsWithPresentation() throws Exception {
        insertDefaultConfigurationTypes();
 		
-		License license = H2StorageTest.createTestLicenseWithAssociations(1L);
+		License license = LicenseModuleStorageTest.createTestLicenseWithAssociations(1L);
 		storage.persistLicense(license);
 
 		GetUserGroupsInputDTO input = new GetUserGroupsInputDTO();
@@ -618,4 +654,40 @@ public class H2StorageTest {
 		return license;
 	}
 
+    /**
+    * Multi protocol resource loader. Primary attempt is direct file, secondary is classpath resolved to File.
+    *
+    * @param resource a generic resource.
+    * @return a File pointing to the resource.
+    */
+   private static File getFile(String resource) throws IOException {
+       File directFile = new File(resource);
+       if (directFile.exists()) {
+           return directFile;
+       }
+       URL classLoader = Thread.currentThread().getContextClassLoader().getResource(resource);
+       if (classLoader == null) {
+           throw new FileNotFoundException("Unable to locate '" + resource + "' as direct File or on classpath");
+       }
+       String fromURL = classLoader.getFile();
+       if (fromURL == null || fromURL.isEmpty()) {
+           throw new FileNotFoundException("Unable to convert URL '" + fromURL + "' to File");
+       }
+       return new File(fromURL);
+   }
+   
+
+   //file.delete does not work for a directory unless it is empty. hence this method
+   private static void doDelete(File path) throws IOException
+   {
+       if (path.isDirectory()) {
+           for (File child : path.listFiles()) {
+               doDelete(child);
+           }
+       }
+       if (!path.delete()) {
+        //ignore.
+       }
+   }
+	
 }

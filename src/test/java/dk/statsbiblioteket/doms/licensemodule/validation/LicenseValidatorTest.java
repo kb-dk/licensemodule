@@ -13,7 +13,7 @@ import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Attribute;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicenseGroupType;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicensePresentationType;
-import dk.statsbiblioteket.doms.licensemodule.persistence.H2StorageTest;
+import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseModuleStorageTest;
 import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseContent;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Presentation;
@@ -31,15 +31,17 @@ public class LicenseValidatorTest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		//Create database before unittests. Only do in start of test  all tests only load data.   
-		H2StorageTest.beforeClass();
-		H2StorageTest.insertDefaultConfigurationTypes();
+		//Create database before unittests, just use the H2StorageTest class that creates the database   
+	    LicenseModuleStorageTest  storageTest = new LicenseModuleStorageTest();
+	    LicenseModuleStorageTest.beforeClass();
+	    storageTest.before(); //initialize the connection        
+        LicenseModuleStorageTest.insertDefaultConfigurationTypes();
 	    LicenseModulePropertiesLoader.setSOLR_FILTER_FIELD("authID"); 
 	}
 
 	@Test
 	public void testfilterUserObjAttributesToValidatedOnly() throws Exception {
-		License license = H2StorageTest.createTestLicenseWithAssociations(1L);
+		License license = LicenseModuleStorageTest.createTestLicenseWithAssociations(1L);
 
 
 		//Attribute: wayf.schacHomeOrganization and values: au.dk
@@ -116,7 +118,7 @@ public class LicenseValidatorTest {
 		 * wayf.schacHomeOrganization  with values: au.dk
 		 * wayf.eduPersonPrimaryAffiliation with values: staff
 		 */				
-		License license = H2StorageTest.createTestLicenseWithAssociations(1L);
+		License license = LicenseModuleStorageTest.createTestLicenseWithAssociations(1L);
 		ArrayList<License> allLicenses= new ArrayList<License>();
 		allLicenses.add(license);
 
@@ -150,7 +152,7 @@ public class LicenseValidatorTest {
 		 * wayf.schacHomeOrganization  with values: au.dk
 		 * 
 		 */				
-		License license = H2StorageTest.createTestLicenseWithAssociations(1L);
+		License license = LicenseModuleStorageTest.createTestLicenseWithAssociations(1L);
 		ArrayList<License> allLicenses= new ArrayList<License>();
 		allLicenses.add(license);
 
@@ -180,7 +182,7 @@ public class LicenseValidatorTest {
 		 * attribut_store.MediestreamFullAccess with values : yes
 		 *
 		 */				
-		License license = H2StorageTest.createTestLicenseWithAssociations(1L);
+		License license = LicenseModuleStorageTest.createTestLicenseWithAssociations(1L);
 		ArrayList<License> allLicenses= new ArrayList<License>();
 		allLicenses.add(license);
 
@@ -267,7 +269,7 @@ public class LicenseValidatorTest {
 	public void testFilterLicensesWithGroupNamesAndPresentationTypeNoMustGroup() throws Exception {
 
 		ArrayList<License> licenses = new ArrayList<License>(); 
-		licenses.add(H2StorageTest.createTestLicenseWithAssociations(1L));
+		licenses.add(LicenseModuleStorageTest.createTestLicenseWithAssociations(1L));
 
 		//'Reklamefilm' not marked for this license
 		ConfiguredDomLicenseGroupType group1 = new ConfiguredDomLicenseGroupType(1L,"Reklamefilm","Reklamefilm","Reklamefilm_en","","","",false);
@@ -298,7 +300,7 @@ public class LicenseValidatorTest {
 	public void testGetUserGroupsWithPresentationTypes() throws Exception {
 		//For this test notice the presentationtypes are loaded from the DB, only the names from input is used
 		ArrayList<License> licenses = new ArrayList<License>(); 
-		licenses.add(H2StorageTest.createTestSimpleMustGroupsLicenseWithAssociations());
+		licenses.add(LicenseModuleStorageTest.createTestSimpleMustGroupsLicenseWithAssociations());
 		ArrayList<String> presentationTypes = new ArrayList<String>();
 		presentationTypes.add("Download");
 
@@ -317,7 +319,7 @@ public class LicenseValidatorTest {
 	public void testFilterLicensesWithGroupNamesAndPresentationTypeMustGroup() throws Exception {
 		//For this test notice the presentationtypes are loaded from the DB, only the names from input is used
 		ArrayList<License> licenses = new ArrayList<License>(); 
-		licenses.add(H2StorageTest.createTestSimpleMustGroupsLicenseWithAssociations());
+		licenses.add(LicenseModuleStorageTest.createTestSimpleMustGroupsLicenseWithAssociations());
 
 
 		//access, 1 must group which
@@ -395,7 +397,7 @@ public class LicenseValidatorTest {
 
 	@Test
 	public void testFilterGroupsWithPresentationtype() throws Exception {
-		License l = H2StorageTest.createTestLicenseWithAssociations(1);
+		License l = LicenseModuleStorageTest.createTestLicenseWithAssociations(1);
 		ArrayList<License> list = new ArrayList<License>();
 		list.add(l);
 		//Easy, just 1 license
@@ -412,7 +414,7 @@ public class LicenseValidatorTest {
 		assertEquals(2,group2.getPresentationTypes().size());
 
 		//add another license
-		License l2 =  H2StorageTest.createTestLicenseWithAssociations(1);
+		License l2 =  LicenseModuleStorageTest.createTestLicenseWithAssociations(1);
 		LicenseContent c = new LicenseContent("TV3");
 		ArrayList<Presentation> p_list = new ArrayList<Presentation>();
 		c.setPresentations(p_list);

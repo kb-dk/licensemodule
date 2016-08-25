@@ -1,5 +1,5 @@
 <%  
-   ArrayList<License> licenses = storage.getAllLicenseNames();
+   ArrayList<License> licenses = LicenseModuleFacade.getAllLicenseNames();
 %>
   <table class="table table-condensed table-hover">
    <thead>

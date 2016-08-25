@@ -17,12 +17,22 @@ public class LicenseModulePropertiesLoader {
 	private static final Logger log = LoggerFactory.getLogger(LicenseModulePropertiesLoader.class);
 	private static final String LICENSEMODULE_PROPERTY_FILE = "license_module.properties";
 	 
-	private static final String H2_DB_FILE_PROPERTY="licensemodule.h2.db.file";
-	private static final String H2_DB_BACKUP_FOLDER_PROPERTY="licensemodule.h2.db.backup.folder";
+	
+	private static final String DB_DRIVER_PROPERTY="licensemodule.database.driver"; 
+	private static final String DB_URL_PROPERTY="licensemodule.database.url";
+	private static final String DB_USERNAME_PROPERTY="licensemodule.database.username";
+    private static final String DB_PASSWORD_PROPERTY="licensemodule.database.password";
+	
+	
 	private static final String SOLR_SERVERS_PROPERTY = "licensemodule.solr.servers";
 	private static final String SOLR_FILTER_FIELD_PROPERTY = "licensemodule.solr.filter.field";
 	
-	public static String DBFILE = null;
+	
+    public static String DB_DRIVER = null; 
+    public static String DB_URL  = null;
+    public static String DB_USERNAME = null;
+    public static String DB_PASSWORD = null;
+
 	public static String DBBACKUPFOLDER = null;
 	public static ArrayList<SolrServerClient> SOLR_SERVERS = null;
 	public static String SOLR_FILTER_FIELD = null;
@@ -47,9 +57,10 @@ public class LicenseModulePropertiesLoader {
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(isr);
 		isr.close();
-
-		DBFILE =serviceProperties.getProperty(H2_DB_FILE_PROPERTY);		
-		DBBACKUPFOLDER =serviceProperties.getProperty(H2_DB_BACKUP_FOLDER_PROPERTY);
+		DB_DRIVER= serviceProperties.getProperty(DB_DRIVER_PROPERTY);
+        DB_URL = serviceProperties.getProperty(DB_URL_PROPERTY);
+        DB_USERNAME = serviceProperties.getProperty(DB_USERNAME_PROPERTY);
+        DB_PASSWORD = serviceProperties.getProperty(DB_PASSWORD_PROPERTY);            				
 		SOLR_FILTER_FIELD = serviceProperties.getProperty(SOLR_FILTER_FIELD_PROPERTY); 
 		 
 		String solr_servers=serviceProperties.getProperty(SOLR_SERVERS_PROPERTY);	
@@ -60,8 +71,12 @@ public class LicenseModulePropertiesLoader {
 		  SOLR_SERVERS.add(new SolrServerClient(tokens.nextToken().trim()));    		   
 		}		
 		
-		log.info("Property:"+ H2_DB_FILE_PROPERTY +" = " + DBFILE );
-		log.info("Property:"+ H2_DB_BACKUP_FOLDER_PROPERTY +" = "+ DBBACKUPFOLDER );
+		
+        log.info("Property:"+ DB_DRIVER_PROPERTY +" = "+ DB_DRIVER);
+	    log.info("Property:"+ DB_URL_PROPERTY +" = "+ DB_URL);
+	    log.info("Property:"+ DB_USERNAME_PROPERTY +" = "+ DB_USERNAME);
+	    log.info("Property:"+ DB_PASSWORD_PROPERTY +" = *******");      
+	    	
 		log.info("Property:"+ SOLR_FILTER_FIELD_PROPERTY +" = "+  SOLR_FILTER_FIELD);
 	    log.info("Property:"+ SOLR_SERVERS_PROPERTY +" = "+  solr_servers);
 	    log.info("Number of solr servers:"+SOLR_SERVERS.size());

@@ -1,3 +1,9 @@
+v.2.2: 2015-08-xx
+DB migration H2-> Postgres
+Various refactoring of facade/DB layer, seperation. 
+Upgrade to java 8 + Tomcat 8
+
+
 v.2.1: 2015-03-14
 new changelog date-version format...(same as ELBA) 
 Validation exception instead of nullpointer if ID input-list is null

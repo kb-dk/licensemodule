@@ -59,12 +59,11 @@ public class LicenseCache {
 	}
 
 	public static void reloadCache() {
-		try {
-			
+	    LicenseModuleStorage storage =  null;
+	    try {
+			storage = new LicenseModuleStorage();
 			log.info("Reloading cache from DB");
 			lastReloadTime = System.currentTimeMillis();
-
-			H2Storage storage = H2Storage.getInstance();
 
 			// Load all Licenses
 			ArrayList<License> licenseList = new ArrayList<License>();
@@ -108,6 +107,9 @@ public class LicenseCache {
 			log.error("Error in reload cache", e);
 			throw new RuntimeException(e);
 		}
+		finally{
+            storage.close();            
+        }				
 	}
 
 	public static String getPresentationtypeName(String id, String locale){

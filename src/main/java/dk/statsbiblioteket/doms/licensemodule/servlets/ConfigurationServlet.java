@@ -14,9 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
+import dk.statsbiblioteket.doms.licensemodule.facade.LicenseModuleFacade;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicenseGroupType;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicensePresentationType;
-import dk.statsbiblioteket.doms.licensemodule.persistence.H2Storage;
+import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseModuleStorage;
 import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseCache;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsInputDTO;
@@ -41,7 +42,7 @@ public class ConfigurationServlet extends HttpServlet {
 		String event = request.getParameter("event");
 		log.info("New event for ConfigurationServlet:" + event);
 
-		H2Storage storage = H2Storage.getInstance();
+
 
 		try {
 			// tab 0 is list licenses
@@ -52,7 +53,7 @@ public class ConfigurationServlet extends HttpServlet {
 				String value = request.getParameter("value_presentationtype");
 				String value_en = request.getParameter("value_en_presentationtype");
 				log.debug("Saving new presentationtype:" + key);
-				storage.persistDomLicensePresentationType(key,value,value_en);
+				LicenseModuleFacade.persistDomLicensePresentationType(key,value,value_en);
 			} else if ("save_grouptype".equals(event)) {
 				request.setAttribute("tab", "2");
 				String key = request.getParameter("key_grouptype");
@@ -67,14 +68,14 @@ public class ConfigurationServlet extends HttpServlet {
 				if (isMustGroupStr != null) { // Checkbox is checked
 					isMustGroup = true;
 				}
-				storage.persistDomLicenseGroupType(key,value_dk,value_en,description,description_en,query, isMustGroup);
+				LicenseModuleFacade.persistDomLicenseGroupType(key,value_dk,value_en,description,description_en,query, isMustGroup);
 
 			} else if ("save_attributetype".equals(event)) {
 
 				request.setAttribute("tab", "3");
 				String value = request.getParameter("value_attributetype");
 				log.debug("Saving new attributetype:" + value);
-				storage.persistDomAttributeType(value);
+				LicenseModuleFacade.persistDomAttributeType(value);
 
 			} else if ("validate".equals(event)) {
 				log.debug("validate called");
@@ -121,19 +122,19 @@ public class ConfigurationServlet extends HttpServlet {
 				log.debug("deletePresentationType called");
 				request.setAttribute("tab", "1");
 				String typeName = request.getParameter("typeName");				                                                           				
-				storage.deleteDomPresentationType(typeName);
+				LicenseModuleFacade.deleteDomPresentationType(typeName);
 			}
 			else if ("deleteGroupType".equals(event)) {
 				log.debug("deleteGroup called");
 				request.setAttribute("tab", "2");
 				String typeName = request.getParameter("typeName");				                                                           				
-				storage.deleteDomLicenseGroupType(typeName);
+				LicenseModuleFacade.deleteDomLicenseGroupType(typeName);
 			}
 			else if ("deleteAttributeType".equals(event)) {
 				log.debug("deleteAttributeType called");
 				request.setAttribute("tab", "3");
 				String typeName = request.getParameter("typeName");				                                                           				
-				storage.deleteDomAttributeType(typeName);
+				LicenseModuleFacade.deleteDomAttributeType(typeName);
 			}
 			else if ("updateGroup".equals(event)) {
 				log.debug("updateGroup called");
@@ -153,7 +154,7 @@ public class ConfigurationServlet extends HttpServlet {
 					isMustGroup = true;
 				}
 				log.debug("Updating license group with id:" + id);
-				storage.updateDomLicenseGroupType(Long.parseLong(id),value, value_en,description,description_en, query, isMustGroup);
+				LicenseModuleFacade.updateDomLicenseGroupType(Long.parseLong(id),value, value_en,description,description_en, query, isMustGroup);
 			}						
 			else if ("updatePresentationType".equals(event)) {
 				log.debug("updatePresentationType called");
@@ -163,7 +164,7 @@ public class ConfigurationServlet extends HttpServlet {
 				String value = request.getParameter("value_presentationtype");
 				String value_en = request.getParameter("value_en_presentationtype");							
 				log.debug("Updating presentatintype with id:" + id);
-				storage.updateDomPresentationType(Long.parseLong(id),value, value_en);
+				LicenseModuleFacade.updateDomPresentationType(Long.parseLong(id),value, value_en);
 			}						
 			else {								
 				log.error("Unknown event:" + event);
@@ -176,7 +177,7 @@ public class ConfigurationServlet extends HttpServlet {
 			returnFormPage(request, response);
 			return;
 		}
-
+		
 		returnFormPage(request, response);
 		return;
 	}

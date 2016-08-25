@@ -2,6 +2,7 @@
     java.util.*,
     dk.statsbiblioteket.doms.licensemodule.persistence.*,
     dk.statsbiblioteket.doms.licensemodule.service.*,
+    dk.statsbiblioteket.doms.licensemodule.facade.*,
     dk.statsbiblioteket.doms.licensemodule.*"%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
@@ -18,9 +19,6 @@
 </head>
 <body>
 
-<%
-   H2Storage storage = H2Storage.getInstance();   
-%>
 
 <script>
     function save(type){

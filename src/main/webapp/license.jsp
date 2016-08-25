@@ -3,6 +3,7 @@
     java.util.*,
     dk.statsbiblioteket.doms.licensemodule.persistence.*,
     dk.statsbiblioteket.doms.licensemodule.service.*,
+    dk.statsbiblioteket.doms.licensemodule.facade.*,
     dk.statsbiblioteket.doms.licensemodule.*"%>
 
 <!DOCTYPE html>
@@ -22,12 +23,12 @@
      License license = null;
      String licenseId = request.getParameter("licenseId");
      String createNew = request.getParameter("createNew");
-     H2Storage storage = H2Storage.getInstance();
+     
      
     if(licenseId != null){ //Edit existing license
       
       
-      license = storage.getLicense(Long.parseLong(licenseId));
+      license = LicenseModuleFacade.getLicense(Long.parseLong(licenseId));
       session.setAttribute("license",license);
     }           
     else if ("true".equals(createNew)  || session.getAttribute("license") == null){        

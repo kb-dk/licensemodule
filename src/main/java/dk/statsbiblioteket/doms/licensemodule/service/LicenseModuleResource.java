@@ -12,10 +12,8 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 import dk.statsbiblioteket.doms.licensemodule.MonitorCache;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicensePresentationType;
-import dk.statsbiblioteket.doms.licensemodule.persistence.H2Storage;
 import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsInputDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsOutputDTO;
@@ -233,24 +231,7 @@ public class LicenseModuleResource {
 	   return output;
 	}		
 	
-	/*
-	 * This method is not called from frontend. It creates a backup of
-	 * the database.  dbBackupfolder must defined in the property-file
-	 *   
-	 */
-	@POST
-	@Path("system/backup_database")
-	public void backupDatabase() throws LicenseModuleServiceException  {
-	    MonitorCache.registerNewRestMethodCall("backupDatabase");
-	    String file = LicenseModulePropertiesLoader.DBBACKUPFOLDER+"/"+System.currentTimeMillis()+".zip";			
-		log.info("Making DB backup to:"+ file);
-		try {
-			H2Storage.getInstance().backupDatabase(file);	
-		} catch (Exception e) {
-			throw handleServiceExceptions(e);
-		}
-		log.info("DB backup succeeded:"+ file);
-	}
+	
 	
 	@GET
 	@Path("system/monitoring")

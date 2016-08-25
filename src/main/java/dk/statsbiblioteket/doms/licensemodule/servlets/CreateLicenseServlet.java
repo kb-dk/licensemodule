@@ -12,11 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dk.statsbiblioteket.doms.licensemodule.facade.LicenseModuleFacade;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Attribute;
 import dk.statsbiblioteket.doms.licensemodule.persistence.AttributeGroup;
 import dk.statsbiblioteket.doms.licensemodule.persistence.AttributeValue;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicenseGroupType;
-import dk.statsbiblioteket.doms.licensemodule.persistence.H2Storage;
+import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseModuleStorage;
 import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseCache;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseContent;
@@ -45,10 +46,10 @@ public class CreateLicenseServlet extends HttpServlet {
 		log.info("new event for License:"+licenseName +" event:"+event);
 
 		try {				   
-			
 			license = buildLicenseFromRequest(licenseId,request);	
 			request.getSession().setAttribute("license",license);			
-
+			
+			
 			if ("addAttributeGroup".equals(event)){
 				log.info("Adding new Attributegroup");
 				ArrayList<AttributeGroup> attributeGroups = license.getAttributeGroups();				        
@@ -105,14 +106,15 @@ public class CreateLicenseServlet extends HttpServlet {
 		        	returnFormPage(request, response);
 		        	return;
 		        }
-				
-		        H2Storage.getInstance().persistLicense(license);
+						        
+		        LicenseModuleFacade.persistLicense(license);
 				returnConfigurationPage(request, response);
 				return;
 			}
 			else if ("delete".equals(event)){			    				
-				log.info("delete license");										        
-				H2Storage.getInstance().deleteLicense(licenseId, true);
+				log.info("delete license");		
+				LicenseModuleFacade.persistLicense(license);
+				LicenseModuleFacade.deleteLicense(licenseId, true);
 				returnConfigurationPage(request, response);
 				return;
 			}			
@@ -128,7 +130,7 @@ public class CreateLicenseServlet extends HttpServlet {
 			returnFormPage(request, response);
 			return;		
 		}
-
+	    
 		returnFormPage(request, response);
 		return;	
 	}

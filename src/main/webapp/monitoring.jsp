@@ -2,7 +2,6 @@
 %>
 
 <strong>Server start:<%=MonitorCache.SERVER_START_TIME%></strong></br>
-<strong>Last DB backup since server start:<%=H2Storage.LASTDATABASEBACKUPDATE%> Number of backups:<%=H2Storage.NUMBER_DATABASE_BACKUP_SINCE_STARTUP%></strong></br>
 
 
 <table class="table table-condensed table-hover">
