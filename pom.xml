@@ -4,7 +4,7 @@
 <modelVersion>4.0.0</modelVersion>
  <groupId>dk.statsbiblioteket.licensemodule</groupId>
  <artifactId>licensemodule</artifactId>
- <version>2.2</version>
+ <version>3.0</version>
  <name>licensemodule</name>
  <packaging>war</packaging>
 

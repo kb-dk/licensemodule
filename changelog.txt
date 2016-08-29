@@ -1,8 +1,19 @@
-v.2.2: 2015-08-xx
+v.3.0: 2015-08-29
 DB migration H2-> Postgres
-Various refactoring of facade/DB layer, separation. 
+Diverse refactoring of facade/DB layer, connectionpool, separation og logik. 
 Upgrade to java 8 + Tomcat 8
 
+Nye properties i license_module.properties: (de 3 sidste er miljø specifikke)
+licensemodule.database.driver=org.postgresql.Driver
+licensemodule.database.url=jdbc:postgresql://devel06:5432/licmod-devel
+licensemodule.database.username=licmod
+licensemodule.database.password=pLn(z3.qu_N@
+
+Slet de 2 properties som indeholder h2.db i sig.
+DB backup procedure ændret og h2 håndtag fjernet
+DDL script til oprettelse af tabeller
+Diverse SQL scripts til data migrering.
+Slet H2 database filer/backup filer
 
 v.2.1: 2015-03-14
 new changelog date-version format...(same as ELBA) 
