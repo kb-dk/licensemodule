@@ -1,3 +1,6 @@
+v.3.1: 
+Lower rows (max number of results from Solr) for authentication lookup for less GC-load on Solr servers
+
 v.3.0: 2015-08-29
 DB migration H2-> Postgres
 Diverse refactoring of facade/DB layer, connectionpool, separation og logik. 
