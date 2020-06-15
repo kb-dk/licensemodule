@@ -1,3 +1,5 @@
+v.4.0:bla bla
+
 v.3.1: 
 Lower rows (max number of results from Solr) for authentication lookup for less GC-load on Solr servers
 
