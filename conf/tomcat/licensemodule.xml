@@ -1,0 +1,12 @@
+<Context docBase="${user.home}/services/tomcat-apps/licensemodule.war">
+    <Environment name="licensemodule-logback-config"
+                value="${user.home}/services/conf/licensemodule.logback.xml"
+                type="java.lang.String"
+                override="false"/>
+                
+    <Environment name="application-config"
+                value="${user.home}/services/conf/license_module.properties"
+                type="java.lang.String"
+                override="false"/>
+
+</Context>

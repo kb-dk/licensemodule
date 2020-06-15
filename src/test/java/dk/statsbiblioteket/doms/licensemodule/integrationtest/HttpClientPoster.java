@@ -3,12 +3,10 @@ package dk.statsbiblioteket.doms.licensemodule.integrationtest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
 
 public class HttpClientPoster {
 
-	
+  /*
 public static String postJSON(String url, String content) throws Exception {
 	    
 		HttpClient client = new HttpClient();
@@ -47,7 +45,8 @@ public static String postJSON(String url, String content) throws Exception {
 				}
 		}
 
+
 	}
-	
+*/	
 	
 }

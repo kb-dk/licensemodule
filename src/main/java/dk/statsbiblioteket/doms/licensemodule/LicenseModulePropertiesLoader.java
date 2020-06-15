@@ -37,10 +37,10 @@ public class LicenseModulePropertiesLoader {
 	public static ArrayList<SolrServerClient> SOLR_SERVERS = null;
 	public static String SOLR_FILTER_FIELD = null;
 	
-    public static void init(){
-		log.info("Initializing Licensemodule-properties");
+    public static void init(String propertyFile){
+		log.info("Initializing Licensemodule-properties from file:{}",propertyFile);
 		try {
-			initProperties();		
+			initProperties(propertyFile);		
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -49,10 +49,9 @@ public class LicenseModulePropertiesLoader {
 	}
  
 
-	private static void initProperties()  throws Exception{
-		String user_home=System.getProperty("user.home");
-		log.info("Load properties: Using user.home folder:" + user_home);
-		InputStreamReader isr = new InputStreamReader(new FileInputStream(new File(user_home,LICENSEMODULE_PROPERTY_FILE)), "ISO-8859-1");
+	private static void initProperties(String propertyFile)  throws Exception{
+	
+		InputStreamReader isr = new InputStreamReader(new FileInputStream(new File(propertyFile)), "UTF-8");
 
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(isr);

@@ -359,7 +359,7 @@ public class LicenseValidator {
 	}
 
 	//Filter so only the UserObjAttribute that match the license are returned. Values that does not match are also removed.
-	protected static ArrayList<UserObjAttributeDTO> filterUserObjAttributesToValidatedOnly(Attribute licenseattribute,  ArrayList<UserObjAttributeDTO> userAttributes){
+	public static ArrayList<UserObjAttributeDTO> filterUserObjAttributesToValidatedOnly(Attribute licenseattribute,  ArrayList<UserObjAttributeDTO> userAttributes){
 		String name = licenseattribute.getAttributeName();
 		ArrayList<AttributeValue> values = licenseattribute.getValues();		
 		ArrayList<UserObjAttributeDTO> filteredUserObjAttributes = new ArrayList<UserObjAttributeDTO>();

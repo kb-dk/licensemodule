@@ -12,25 +12,27 @@ import org.slf4j.LoggerFactory;
 import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseModuleStorage;
 
+import javax.naming.InitialContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class InitializationContextListener implements ServletContextListener {
-	private static final Logger log = LoggerFactory.getLogger(InitializationContextListener.class);
+  
+	private  final Logger log = LoggerFactory.getLogger(getClass());
     private static String version;	
 	//this is called by the web-container before opening up for requests.(defined in web.xml)
 	public void contextInitialized(ServletContextEvent event) {
 
 
 	    log.info("Licensemodule starting up...");
-		Properties props = new Properties();
 		try 
 		{
-			props.load(InitializationContextListener.class.getResourceAsStream("/build.properties"));
-		    version = props.getProperty("APPLICATION.VERSION");
-			log.info("Licensemodule version "+version+" started successfully");
-			
-			 LicenseModulePropertiesLoader.init(); //Load properties
+          InitialContext ctx = new InitialContext();
+          String configFile = (String) ctx.lookup("java:/comp/env/application-config");
+          version =  getClass().getPackage().getImplementationVersion();
+          log.info("Licensemodule version "+version+" started successfully");
+							    					
+		  LicenseModulePropertiesLoader.init(configFile); //Load properties
 			
 		} catch (Exception e) {
 			log.error("failed to initialize service", e);
@@ -55,9 +57,7 @@ public class InitializationContextListener implements ServletContextListener {
 
 	//this is called by the web-container at shutdown. (defined in web.xml)
     public void contextDestroyed(ServletContextEvent sce) {
-        try {
-          
-        
+        try {        
             LicenseModuleStorage.shutdown();
 
             Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -72,10 +72,10 @@ public class InitializationContextListener implements ServletContextListener {
                     log.debug("Error deregistering driver {}", driver, e);
                 }
             }
-            log.info("Attributestore "+version+" shutdown success");
+            log.info("Licensemodule "+version+" shutdown success");
 
         } catch (Exception e) {
-            log.error("failed to shutdown Attributestore", e);
+            log.error("failed to shutdown Licensemodule", e);
         }
                 
     }

@@ -9,11 +9,6 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
-import com.google.gson.Gson;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsInputDTO;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsOutputDTO;
@@ -30,7 +25,7 @@ import dk.statsbiblioteket.doms.licensemodule.service.dto.ValidateAccessOutputDT
 //This class is an integration test and require a local webserver to be running with licesemodule.war installed.
 //Used on database with testdata from unittest
 public class LicenseModuleRestWSTester {
-
+/*
 	public static void main(String[] args) throws Exception {
 		
 		// testValidateAccess();
@@ -355,6 +350,6 @@ public class LicenseModuleRestWSTester {
 	}
 
 	
-
+*/
 	
 }

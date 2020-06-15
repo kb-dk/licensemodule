@@ -56,8 +56,8 @@ public class LicenseModuleResource {
 	
 	
 	@POST	
-	@Consumes(MediaType.TEXT_XML)	
-	@Path("checkAccessForIds")	
+	@Path("checkAccessForIds")
+	@Consumes(MediaType.TEXT_XML)			
 	@Produces(MediaType.TEXT_XML)
 	public CheckAccessForIdsOutputDTO checkAccessForIds(CheckAccessForIdsInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
@@ -104,21 +104,11 @@ public class LicenseModuleResource {
 	}		
 					
 	
+
 	@POST	
 	@Path("getUserLicenses")	
-	@Consumes(MediaType.APPLICATION_JSON)	
-	@Produces(MediaType.APPLICATION_JSON)
-	public GetUsersLicensesOutputDTO getUserLicensesJSON(GetUsersLicensesInputDTO input)
-			                        throws LicenseModuleServiceException  {        			
-	    MonitorCache.registerNewRestMethodCall("getUserLicensesJSON");
-	    log.info("getUserLicensesJSON called");
-		return getUserLicenses(input);
-	}		
-	
-	@POST	
-	@Path("getUserLicenses")	
-	@Consumes(MediaType.TEXT_XML)	
-	@Produces(MediaType.TEXT_XML)
+	@Consumes({MediaType.TEXT_XML,MediaType.APPLICATION_JSON})	
+	@Produces({MediaType.TEXT_XML,MediaType.APPLICATION_JSON})
 	public GetUsersLicensesOutputDTO getUserLicenses(GetUsersLicensesInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("getUserLicenses");
@@ -189,6 +179,9 @@ public class LicenseModuleResource {
 			throw handleServiceExceptions(e);
 		}			
 	}		
+	
+	
+	  
 	
 	@POST			
 	@Path("getUserGroups")	

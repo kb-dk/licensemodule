@@ -9,12 +9,7 @@
 
   <display-name>dk.statsbiblioteket.doms.licensemodule</display-name>
     
-  
-  <listener>  
-      <listener-class>dk.statsbiblioteket.doms.licensemodule.listeners.Log4JContextListener</listener-class>
-   </listener>
-  
-   <listener>
+     <listener>
       <listener-class>dk.statsbiblioteket.doms.licensemodule.listeners.InitializationContextListener</listener-class>
    </listener>
   
@@ -23,26 +18,23 @@
   </welcome-file-list>
 
 
- 
   <servlet>
     <servlet-name>Licensemodule Service</servlet-name>
-    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
     <init-param>
-      <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>dk.statsbiblioteket.doms.licensemodule.service</param-value>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>dk.statsbiblioteket.doms.licensemodule.service.LicenseModuleApplication</param-value>
     </init-param>
-    <init-param>
-      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-      <param-value>true</param-value>
-    </init-param> 
     <load-on-startup>1</load-on-startup>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>Licensemodule Service</servlet-name>
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
 
+
+ 
   <servlet>
     <servlet-name>createLicenseServlet</servlet-name>
     <servlet-class>dk.statsbiblioteket.doms.licensemodule.servlets.CreateLicenseServlet</servlet-class>
