@@ -247,13 +247,12 @@ public class LicenseModuleResource {
 	//This avoids have each method trying to catch 2+ exceptions with a lot of waste of code-lines
 	private LicenseModuleServiceException  handleServiceExceptions(Exception e){
 		if (e instanceof LicenseModuleServiceException){
-			return (LicenseModuleServiceException) e;  //No nothing,  exception already correct
-		}				
-		else if (e instanceof IllegalArgumentException){
-			log.error("ServiceException(HTTP 400) in LicenseModule:",e.getMessage());
-			return new InvalidArgumentServiceException(e.getMessage());
+			return (LicenseModuleServiceException) e;  //Do nothing,  exception already correct
 		}
-		else {//SQL and other unforseen exceptions.... should not happen.			
+		else if (e instanceof IllegalArgumentException){ //Should be deleted. Code should throw InvalidArgumentServiceException instead and this would not be needed      
+          return new InvalidArgumentServiceException(e.getMessage());
+      }
+		else {//SQL, nullpointer and other unforseen exceptions.... should not happen.			
 			log.error("ServiceException(HTTP 500) in LicenseModule:",e);
 			return new InternalServiceException(e.getMessage());
 		}
