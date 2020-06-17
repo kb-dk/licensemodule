@@ -210,9 +210,5 @@ public class LicenseModuleFacade {
         }
 
     }
-    
-
-// License getLicense(long licenseId) throws Exception {
-    
-
+        
 }
