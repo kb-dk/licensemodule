@@ -2,7 +2,7 @@
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
 
     <New id="logback" class="org.eclipse.jetty.plus.jndi.EnvEntry">
-        <Arg>java-webapp-logback-config</Arg>
+        <Arg>jlicensemodule-logback-config</Arg>
         <Arg type="java.lang.String">
             ${basedir}/target/jetty-res/logback.xml
         </Arg>
@@ -12,7 +12,7 @@
     <New id="config" class="org.eclipse.jetty.plus.jndi.EnvEntry">
         <Arg>application-config</Arg>
         <Arg type="java.lang.String">
-            ${basedir}/conf/licensemodule.yaml
+         ${basedir}/target/jetty-res/license_module.properties
         </Arg>
         <Arg type="boolean">true</Arg>
     </New>
