@@ -15,7 +15,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -103,9 +102,7 @@ public class LicenseModuleStorageTest {
 	    public static void beforeClass() throws Exception {
 	      LicenseModulePropertiesLoader.setSOLR_FILTER_FIELD("authID");
 	        LicenseModuleStorage.initialize(DRIVER, URL, USERNAME, PASSWORD);	        
-	        createEmptyDBFromDDL();
-	        System.out.println("created");
-	        
+	        createEmptyDBFromDDL();	        	        
 	    }
 
 	    @AfterAll
@@ -122,8 +119,8 @@ public class LicenseModuleStorageTest {
 
 
 	    @BeforeEach
-	    public  void before() throws Exception {	    
-	        Connection connection = null;
+	    public  void before() throws Exception {	    	        
+	      Connection connection = null;
 	        try {
                 Class.forName(DRIVER); // load the driver
             } catch (ClassNotFoundException e) {
@@ -145,6 +142,7 @@ public class LicenseModuleStorageTest {
 
 	        
 	        storage = new LicenseModuleStorage();
+	        
 	    }
 
 	    @AfterEach
@@ -866,22 +864,12 @@ public class LicenseModuleStorageTest {
    }
 
    @Test
-   public void testFilterMustGroups() throws Exception {
-
-       insertDefaultConfigurationTypes();
+   public void testFilterMustGroups() throws Exception {     
+     insertDefaultConfigurationTypes();
+     LicenseCache.reloadCache(); //The buildGroup and FilterMustGroup uses cache for performance
+              
+      ArrayList<String> groups = new ArrayList<String>(); 
        
-       //1 group that does not exist in DB
-       ArrayList<String> groups = new ArrayList<String>(); 
-       groups.add("does not exist");       
-       try{
-           LicenseValidator.buildGroups(groups);
-           fail();
-       }   
-       catch (IllegalArgumentException e){
-         //expected
-       }
-
-
        //2 groups that does exist, but are not must groups
        groups = new ArrayList<String>(); 
        groups.add("Pligtafleveret170Aar");
@@ -913,6 +901,18 @@ public class LicenseModuleStorageTest {
        assertEquals(3,buildGroups.size());
        filtered = LicenseValidator.filterMustGroups(buildGroups);      
        assertEquals(2, filtered.size());
+       
+       //1 group that does not exist in DB
+       groups = new ArrayList<String>(); 
+       groups.add("does not exist");       
+       try{
+           LicenseValidator.buildGroups(groups);
+           fail();
+       }   
+       catch (IllegalArgumentException e){
+         //expected
+       }
+       
    }
 
    @Test
