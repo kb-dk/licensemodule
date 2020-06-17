@@ -1,4 +1,17 @@
-v.4.0:bla bla
+v.4.0:
+Project updated to follow new guidelines for web projects (ssh://git@sbprojects.statsbiblioteket.dk:7999/ark/java-webapp-template.git)
+Tomcat upgraded to 8.5 - this is a required update for new dependencies.
+Jersey-Rest changed to apache-cfx. This required several code and configuration changes.
+Tomcat context-xml file new required. It defines two file dependencies (license_module.properties + licensemodule.logback.xml)
+log4j updated to logback.
+Junit updated from junit4 to junit5 (minor unittest code changes)
+Third party dependencies updated to newer versions. (Solr 8.3.1 + postgres 42.2.14)
+Developers can now start web-app with jetty:run
+
+New files:
+licensemodule.logback.xml (logback)
+licensemodule.xml (tomcat context) 
+
 
 v.3.1: 
 Lower rows (max number of results from Solr) for authentication lookup for less GC-load on Solr servers
