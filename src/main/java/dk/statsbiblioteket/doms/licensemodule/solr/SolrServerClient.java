@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 public class SolrServerClient extends AbstractSolrJClient{
 
     private static final Logger log = LoggerFactory.getLogger(SolrServerClient .class);
-
+    private String serverUrl = null;
+    
     public SolrServerClient (String serverUrl){
         try{           
+          this.serverUrl = serverUrl;
             solrServer = new HttpSolrClient.Builder(serverUrl).build();       
             solrServer.setRequestWriter(new BinaryRequestWriter()); //To avoid http error code 413/414, due to monster URI. (and it is faster)                
         }
@@ -23,5 +25,9 @@ public class SolrServerClient extends AbstractSolrJClient{
 
     }
 
+    public  String getServerUrl() {
+      return serverUrl;
+    }
+    
 }
 
