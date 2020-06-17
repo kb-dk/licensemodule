@@ -113,7 +113,7 @@ public class LicenseValidator {
 		//But currently these requests are less 10 ms
 		for (SolrServerClient server: servers){
 	        ArrayList<String> filteredIds =server.filterIds(input.getIds(), query.getQuery());
-	        log.info("#filtered id for server ("+input.getPresentationType()+") "+ server.getSolrServer().getBaseURL() +" : "+filteredIds.size());
+	        log.info("#filtered id for server ("+input.getPresentationType()+") "+ server.getServerUrl() +" : "+filteredIds.size());
 		    filteredIdsSet.addAll(filteredIds);
 		}
 		//Now we have to remove remove ID's not asked for that are here because of multivalue field. (set intersection)

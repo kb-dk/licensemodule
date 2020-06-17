@@ -3,11 +3,12 @@ package dk.statsbiblioteket.doms.licensemodule.integrationtest;
 import java.util.ArrayList;
 import dk.statsbiblioteket.doms.licensemodule.solr.SolrServerClient;
 
-//Integration test. Run manually
+//Integration test. Run manually to see solr integration is working
 public class DomsSolrJClientTest {
 
 
-	private static SolrServerClient solrServer = new SolrServerClient("http://mars:50001/solr/aviser.2.devel/");
+     //Find url in property file on devel06 etc.
+	private static SolrServerClient solrServer = new SolrServerClient("http://localhost:50001/solr/aviser.2.devel/");
 		
 	public static void main(String[] args) throws Exception{
 		
