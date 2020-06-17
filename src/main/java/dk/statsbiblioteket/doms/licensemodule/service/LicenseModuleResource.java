@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.statsbiblioteket.doms.licensemodule.MonitorCache;
-import dk.statsbiblioteket.doms.licensemodule.facade.LicenseModuleFacade;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicensePresentationType;
 import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsInputDTO;
@@ -133,8 +132,8 @@ public class LicenseModuleResource {
 	
 	@POST	
 	@Path("getUserLicenseQuery")	
-	@Consumes(MediaType.TEXT_XML)	
-	@Produces(MediaType.TEXT_XML)
+	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})	
+	@Produces({MediaType.TEXT_XML,MediaType.APPLICATION_XML})
 	public String getUserLicenseQuery(GetUserQueryInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("getUserLicenseQuery");
@@ -197,6 +196,23 @@ public class LicenseModuleResource {
         
 	   return output;
 	}		
+	
+	@GET
+    @Path("system/monitoring")
+    @Produces(MediaType.TEXT_XML)
+    public MonitoringOutputDTO extractStatistics() throws LicenseModuleServiceException   {
+        
+        MonitorCache.registerNewRestMethodCall("extractStatistics");
+        MonitoringOutputDTO  output = null;
+        try {
+            output =   new  MonitoringOutputDTO(); //storage.extractStatistics();                   
+                                        
+        } catch (Exception e) {
+            throw handleServiceExceptions(e);
+        }
+           
+        return  output;
+    }
 	
 	//This avoids have each method trying to catch 2+ exceptions with a lot of waste of code-lines
 	private LicenseModuleServiceException  handleServiceExceptions(Exception e){
