@@ -1,8 +1,10 @@
 package dk.statsbiblioteket.doms.licensemodule.persistence;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,12 +15,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +99,7 @@ public class LicenseModuleStorageTest {
 	    }
 
 
-	    @BeforeClass
+	    @BeforeAll
 	    public static void beforeClass() throws Exception {
 	      LicenseModulePropertiesLoader.setSOLR_FILTER_FIELD("authID");
 	        LicenseModuleStorage.initialize(DRIVER, URL, USERNAME, PASSWORD);	        
@@ -106,7 +108,7 @@ public class LicenseModuleStorageTest {
 	        
 	    }
 
-	    @AfterClass
+	    @AfterAll
 	    public static void afterClass() throws Exception {
 	        // No reason to delete DB data after test, since we delete it before each test.
 	        // This way you can open the DB in a DB-browser after a unittest and see the result.
@@ -119,7 +121,7 @@ public class LicenseModuleStorageTest {
 	     */
 
 
-	    @Before
+	    @BeforeEach
 	    public  void before() throws Exception {	    
 	        Connection connection = null;
 	        try {
@@ -145,7 +147,7 @@ public class LicenseModuleStorageTest {
 	        storage = new LicenseModuleStorage();
 	    }
 
-	    @After
+	    @AfterEach
 	    public void after() throws Exception {
 	        storage.rollback();
 	        storage.close();
@@ -866,6 +868,8 @@ public class LicenseModuleStorageTest {
    @Test
    public void testFilterMustGroups() throws Exception {
 
+       insertDefaultConfigurationTypes();
+       
        //1 group that does not exist in DB
        ArrayList<String> groups = new ArrayList<String>(); 
        groups.add("does not exist");       
@@ -874,7 +878,7 @@ public class LicenseModuleStorageTest {
            fail();
        }   
        catch (IllegalArgumentException e){
-           //expected
+         //expected
        }
 
 
