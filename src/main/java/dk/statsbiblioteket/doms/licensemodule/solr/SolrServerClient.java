@@ -1,7 +1,8 @@
 package dk.statsbiblioteket.doms.licensemodule.solr;
 
 import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ public class SolrServerClient extends AbstractSolrJClient{
 
     public SolrServerClient (String serverUrl){
         try{           
-            solrServer = new HttpSolrServer(serverUrl);
+            solrServer = new HttpSolrClient.Builder(serverUrl).build();       
             solrServer.setRequestWriter(new BinaryRequestWriter()); //To avoid http error code 413/414, due to monster URI. (and it is faster)                
         }
         catch(Exception e){            

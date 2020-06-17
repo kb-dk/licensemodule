@@ -3,8 +3,9 @@ package dk.statsbiblioteket.doms.licensemodule.solr;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 public class AbstractSolrJClient {
     private static final Logger log = LoggerFactory.getLogger(AbstractSolrJClient.class);
     private static String filterField;
-    protected HttpSolrServer solrServer;
+    protected static HttpSolrClient solrServer; 
     static{ 
         //Silent all the debugs log from HTTP Client (used by SolrJ)
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
@@ -87,7 +88,7 @@ public class AbstractSolrJClient {
     }
 
 
-    public HttpSolrServer getSolrServer() {
+    public SolrClient getSolrServer() {
         return solrServer;
     }
 
