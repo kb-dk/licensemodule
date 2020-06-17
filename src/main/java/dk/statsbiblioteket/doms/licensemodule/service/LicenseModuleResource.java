@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.statsbiblioteket.doms.licensemodule.MonitorCache;
+import dk.statsbiblioteket.doms.licensemodule.facade.LicenseModuleFacade;
 import dk.statsbiblioteket.doms.licensemodule.persistence.ConfiguredDomLicensePresentationType;
 import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.service.dto.CheckAccessForIdsInputDTO;
@@ -35,30 +36,17 @@ import dk.statsbiblioteket.doms.licensemodule.service.exception.InvalidArgumentS
 import dk.statsbiblioteket.doms.licensemodule.service.exception.LicenseModuleServiceException;
 import dk.statsbiblioteket.doms.licensemodule.validation.LicenseValidator;
 
-
-
 //No path except the context root+servletpath for the application. Example http://localhost:8080/licensemodule/services 
 //servlet path is defined in web.xml and is  /services 
 
 @Path("/") 
 public class LicenseModuleResource {
 	private static final Logger log = LoggerFactory.getLogger(LicenseModuleResource.class);		                                                         
-	
-	@POST			
-	@Path("checkAccessForIds")	
-	@Consumes(MediaType.APPLICATION_JSON)	
-	@Produces(MediaType.APPLICATION_JSON)	
-	public CheckAccessForIdsOutputDTO checkAccessForIdsJSON(CheckAccessForIdsInputDTO input)
-			                        throws LicenseModuleServiceException  {        					
-	    MonitorCache.registerNewRestMethodCall("checkAccessForIdsJSON");	    
-	    return checkAccessForIds(input);	
-	}
-	
-	
+			
 	@POST	
 	@Path("checkAccessForIds")
-	@Consumes(MediaType.TEXT_XML)			
-	@Produces(MediaType.TEXT_XML)
+	@Consumes({MediaType.TEXT_XML,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})   
+    @Produces({MediaType.TEXT_XML,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public CheckAccessForIdsOutputDTO checkAccessForIds(CheckAccessForIdsInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("checkAccessForIds");
@@ -87,8 +75,8 @@ public class LicenseModuleResource {
 	
 	@POST	
 	@Path("validateAccess")	
-	@Consumes(MediaType.TEXT_XML)	
-	@Produces(MediaType.TEXT_XML)
+    @Consumes({MediaType.TEXT_XML,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})   
+    @Produces({MediaType.TEXT_XML,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ValidateAccessOutputDTO validateAccess(ValidateAccessInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("validateAccess");
@@ -107,8 +95,8 @@ public class LicenseModuleResource {
 
 	@POST	
 	@Path("getUserLicenses")	
-	@Consumes({MediaType.TEXT_XML,MediaType.APPLICATION_JSON})	
-	@Produces({MediaType.TEXT_XML,MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.TEXT_XML,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})	
+	@Produces({MediaType.TEXT_XML,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public GetUsersLicensesOutputDTO getUserLicenses(GetUsersLicensesInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("getUserLicenses");
@@ -162,15 +150,14 @@ public class LicenseModuleResource {
 	
 	@POST	
 	@Path("getUserGroups")	
-	@Consumes(MediaType.TEXT_XML)	
-	@Produces(MediaType.TEXT_XML)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})  
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 	public GetUserGroupsOutputDTO getUserGroups(GetUserGroupsInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("getUserGroups");	
      log.info("getUserGroups called");
 		try {						
-		    ArrayList<UserGroupDTO> groups = LicenseValidator.getUsersGroups(input);
-            		    		    
+		    ArrayList<UserGroupDTO> groups = LicenseValidator.getUsersGroups(input);            		    		 
 		    GetUserGroupsOutputDTO output = new GetUserGroupsOutputDTO();
 		    output.setGroups(groups);
 		     		
@@ -180,20 +167,7 @@ public class LicenseModuleResource {
 		}			
 	}		
 	
-	
-	  
-	
-	@POST			
-	@Path("getUserGroups")	
-	@Consumes(MediaType.APPLICATION_JSON)	
-	@Produces(MediaType.APPLICATION_JSON)
-	public GetUserGroupsOutputDTO getUserGroupsJSON(GetUserGroupsInputDTO input)
-            throws LicenseModuleServiceException  {        						
-	    MonitorCache.registerNewRestMethodCall("getUserGroupsJSON");
-	    return getUserGroups(input); 
-	}		
-
-	
+		
 	
 	@POST			
 	@Path("getUserGroupsAndLicenses")	
@@ -223,26 +197,6 @@ public class LicenseModuleResource {
         
 	   return output;
 	}		
-	
-	
-	
-	@GET
-	@Path("system/monitoring")
-	@Produces(MediaType.TEXT_XML)
-	public MonitoringOutputDTO extractStatistics() throws LicenseModuleServiceException   {
-		
-	    MonitorCache.registerNewRestMethodCall("extractStatistics");
-		MonitoringOutputDTO  output = null;
-		try {
-			output =   new  MonitoringOutputDTO(); //storage.extractStatistics();					
-										
-		} catch (Exception e) {
-			throw handleServiceExceptions(e);
-		}
-		
-	
-		return  output;
-	}
 	
 	//This avoids have each method trying to catch 2+ exceptions with a lot of waste of code-lines
 	private LicenseModuleServiceException  handleServiceExceptions(Exception e){
