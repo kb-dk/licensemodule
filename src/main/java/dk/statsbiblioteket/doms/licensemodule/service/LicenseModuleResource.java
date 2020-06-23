@@ -132,15 +132,21 @@ public class LicenseModuleResource {
 	
 	@POST	
 	@Path("getUserLicenseQuery")	
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})	
-	@Produces({MediaType.TEXT_XML,MediaType.APPLICATION_XML})
+	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})	
+	@Produces({MediaType.TEXT_XML,MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	public String getUserLicenseQuery(GetUserQueryInputDTO input)
 			                        throws LicenseModuleServiceException  {        			
 	    MonitorCache.registerNewRestMethodCall("getUserLicenseQuery");
 	    log.info("getUserLicenseQuery called");
 		try {
 			GetUserQueryOutputDTO output = LicenseValidator.getUserQuery(input);			
- 		
+	        /*
+			log.info("-------------------getUserLicenseQuery----------------");
+	        log.info("input (presentationtype): "+input.getPresentationType());
+	        log.info("input (attributes): "+input.getAttributes());	        
+			log.info("output (User license query):"+output.getQuery());
+			log.info("output (groups)" + output.getUserLicenseGroups());
+			*/
 	      return output.getQuery();  
 		} catch (Exception e) {
 			throw handleServiceExceptions(e);
