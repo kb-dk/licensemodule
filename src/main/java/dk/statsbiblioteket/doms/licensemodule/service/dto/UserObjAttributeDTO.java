@@ -24,5 +24,11 @@ public class UserObjAttributeDTO {
 	public void setValues(ArrayList<String> values) {
 		this.values = values;
 	}
+
+  @Override
+  public String toString() {
+    return "UserObjAttributeDTO [attribute=" + attribute + ", values=" + values + "]";
+  }
+	
 	
 }
