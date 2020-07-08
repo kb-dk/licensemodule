@@ -16,7 +16,7 @@ import dk.statsbiblioteket.doms.licensemodule.LicenseModulePropertiesLoader;
 public class AbstractSolrJClient {
     private static final Logger log = LoggerFactory.getLogger(AbstractSolrJClient.class);
     private static String filterField;
-    protected static HttpSolrClient solrServer; 
+    protected HttpSolrClient solrServer; 
     static{ 
         //Silent all the debugs log from HTTP Client (used by SolrJ)
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
