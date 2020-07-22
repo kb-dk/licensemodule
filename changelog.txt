@@ -1,4 +1,4 @@
-v.4.0:
+v.4.1:
 Project updated to follow new guidelines for web projects (ssh://git@sbprojects.statsbiblioteket.dk:7999/ark/java-webapp-template.git)
 Tomcat upgraded to 8.5 - this is a required update for new dependencies.
 Jersey-Rest changed to apache-cfx. This required several code and configuration changes.
