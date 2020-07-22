@@ -30,10 +30,11 @@ public class InitializationContextListener implements ServletContextListener {
           InitialContext ctx = new InitialContext();
           String configFile = (String) ctx.lookup("java:/comp/env/application-config");
           version =  getClass().getPackage().getImplementationVersion();
-          log.info("Licensemodule version "+version+" started successfully");
+          
 							    					
 		  LicenseModulePropertiesLoader.init(configFile); //Load properties
-			
+		  log.info("Licensemodule version "+version+" started successfully");
+		  
 		} catch (Exception e) {
 			log.error("failed to initialize service", e);
 			throw new RuntimeException("failed to initialize service", e);
