@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dk.statsbiblioteket.licensemodule</groupId>
 	<artifactId>licensemodule</artifactId>
-	<version>4.1-SNAPSHOT</version>
+	<version>4.1</version>
 	<name>licensemodule</name>
 	<packaging>war</packaging>
 
@@ -19,7 +19,7 @@
     <connection>scm:git:https://github.com/kb-dk/licensemodule.git</connection>
     <developerConnection>scm:git:git@github.com:kb-dk/licensemodule</developerConnection>
     <url>https://github.com/kb-dk/licensemodule</url>
-    <tag>HEAD</tag>
+    <tag>licensemodule-4.1</tag>
   </scm>
 
 	<properties>
