@@ -56,7 +56,7 @@ openshift.withCluster() { // Use "default" cluster or fallback to OpenShift clus
 
                         stage("Create build and deploy application") { 
                             openshift.newBuild("--strategy source", "--binary", "-i kb-infra/kb-s2i-tomcat85", "--name licensemodule")
-                            openshift.startBuild("licensemodule", "--from-dir=.", "--follow")
+                            openshift.startBuild("licensemodule", "--from-dir=.", "--follow", "--loglevel=8")
                             openshift.newApp("licensemodule:latest")
                             openshift.create("route", "edge", "--service=licensemodule")
                         }
