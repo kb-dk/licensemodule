@@ -56,7 +56,7 @@ openshift.withCluster() { // Use "default" cluster or fallback to OpenShift clus
                         sh "rm -rf doc" // work-around to get Openshift to build the project due to a 'æ' in a filename
                         stage("Create build and deploy application") { 
                             openshift.newBuild("--strategy source", "--binary", "-i kb-infra/kb-s2i-tomcat85", "--name licensemodule")
-                            openshift.startBuild("licensemodule", "--from-dir=.", "--follow", "--loglevel=8")
+                            openshift.startBuild("licensemodule", "--from-dir=.", "--follow")
                             openshift.newApp("licensemodule:latest")
                             openshift.create("route", "edge", "--service=licensemodule")
                         }
