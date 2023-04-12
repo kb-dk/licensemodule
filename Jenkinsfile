@@ -14,7 +14,7 @@ openshift.withCluster() { // Use "default" cluster or fallback to OpenShift clus
                        secretVolume(mountPath: '/etc/m2', secretName: 'maven-settings')
             ],
             envVars: [
-                       envVar(key: 'USE_JAVA_VERSION', value: 'java-1.8'),
+                       envVar(key: 'USE_JAVA_VERSION', value: 'java-11'),
                        envVar(key: 'MAVEN_SKIP_RC', value: 'true')
             ]) {
 
@@ -89,12 +89,7 @@ openshift.withCluster() { // Use "default" cluster or fallback to OpenShift clus
         } catch (e) {
             currentBuild.result = 'FAILURE'
             throw e
-        } finally {
-            configFileProvider([configFile(fileId: "notifier", variable: 'notifier')]) {  
-                def notifier = load notifier             
-                notifier.notifyInCaseOfFailureOrImprovement(true, "#playground")
-            } 
-        }
+        } 
     }
 }
 
