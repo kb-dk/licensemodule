@@ -72,4 +72,13 @@ public class ConfiguredDomLicenseGroupType extends Persistent {
 	public String toString(){
 		return key;
 	}
+	
+
+    public String toPresentationtString() {
+        return "GroupType [key=" + key + ", value_dk=" + value_dk + ", value_en=" + value_en + ", description_dk="
+                + description_dk + ", description_en=" + description_en + ", query=" + query + ", mustgroup="
+                + mustGroup + "]";
+    }
+	
+	
 }

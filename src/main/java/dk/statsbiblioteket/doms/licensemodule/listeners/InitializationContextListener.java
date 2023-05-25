@@ -24,8 +24,9 @@ public class InitializationContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 
 
-	    log.info("Licensemodule starting up...");
-		try 
+	    log.info("Licensemodule starting up...");	    
+	    
+	    try 
 		{
           InitialContext ctx = new InitialContext();
           String configFile = (String) ctx.lookup("java:/comp/env/application-config");

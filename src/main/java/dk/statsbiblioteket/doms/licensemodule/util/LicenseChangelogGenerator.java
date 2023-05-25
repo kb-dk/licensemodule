@@ -199,14 +199,14 @@ public class LicenseChangelogGenerator {
         
     }
         
-    private static ChangeDifferenceText getNewGroupTypeChanges(GroupType type) {   
+    private static ChangeDifferenceText getNewGroupTypeChanges(ConfiguredDomLicenseGroupType type) {   
         StringBuilder builder = new StringBuilder();
         builder.append(type.toPresentationtString());
         ChangeDifferenceText changes = new ChangeDifferenceText("",builder.toString());
         return changes;        
     }
 
-    private static ChangeDifferenceText getDeleteGroupTypeChanges(GroupType type) {   
+    private static ChangeDifferenceText getDeleteGroupTypeChanges(ConfiguredDomLicenseGroupType type) {   
         //Just switch change text from nrew
         ChangeDifferenceText change = getNewGroupTypeChanges(type);
         String after    =change.getAfter();

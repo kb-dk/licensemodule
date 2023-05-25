@@ -1,9 +1,6 @@
 package dk.statsbiblioteket.doms.licensemodule.persistence;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -84,7 +81,7 @@ public class LicenseModuleStorage {
     private final static String selectLicenseQuery = " SELECT * FROM " + LICENSE_TABLE + " WHERE ID = ? ";
 
     private final static String persistDomLicensePresentationTypeQuery = "INSERT INTO " + DOMLICENSEPRESENTATIONTYPES_TABLE + " (" + ID_COLUMN + "," + KEY_COLUMN + "," + VALUE_DK_COLUMN + ","
-            + VALUE_EN_COLUMN + "," + ") VALUES (?,?,?,?)"; // #|?|=4
+            + VALUE_EN_COLUMN + ") VALUES (?,?,?,?)"; // #|?|=4
 
     private final static String persistAttributeGroupForLicenseQuery = "INSERT INTO " + ATTRIBUTEGROUP_TABLE + " (" + ID_COLUMN + "," + NUMBER_COLUMN + "," + LICENSEID_COLUMN + ") VALUES (?,?,?)"; // #|?|=3
 
@@ -240,7 +237,8 @@ public class LicenseModuleStorage {
             // No license in DB with that ID, nothing to delete
             return;
         }
-
+    
+        
         for (AttributeGroup currentAttributeGroup : license.getAttributeGroups()) {
 
             ArrayList<Attribute> attributes = currentAttributeGroup.getAttributes();
@@ -259,6 +257,7 @@ public class LicenseModuleStorage {
         deleteById(deleteAttributeGroupByLicenseIdQuery, licenseId, commit);
         deleteById(deleteLicenseByLicenseIdQuery, licenseId, commit);
 
+        
         LicenseCache.reloadCache(); // Force reload so the change will be instant in the cache
     }
 
