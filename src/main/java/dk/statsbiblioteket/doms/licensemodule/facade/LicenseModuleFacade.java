@@ -25,7 +25,7 @@ import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 public class LicenseModuleFacade {
 
     static String catalinaBase= System.getProperty("catalina.base");                       
-    static String logFileLocation = catalinaBase+"/logs/audit.log";    
+    static String logFileLocation = catalinaBase+"/logs/licensemodule_audit.log";    
     static Path auditLogFile = Paths.get(logFileLocation);
  
     
@@ -157,12 +157,11 @@ public class LicenseModuleFacade {
     }
     
     
-    public static void deleteDomPresentationType(String IP, String presentationName) throws Exception {
+    public static void deleteDomPresentationType(String IP, String key) throws Exception {
         LicenseModuleStorage storage = new LicenseModuleStorage();
         try {
-            storage.deleteDomPresentationType(presentationName);
-                                    
-            ConfiguredDomLicensePresentationType oldType = getGroupTypeByPresentationName(presentationName);           
+            ConfiguredDomLicensePresentationType oldType = getGroupTypeByPresentationName(key);
+            storage.deleteDomPresentationType(key);                                               
             ChangeDifferenceText changes = LicenseChangelogGenerator.getPresentationTypeChanges(oldType, null);
             AuditLog auditLog = new AuditLog(System.currentTimeMillis(),IP,"Delete presentationtype", oldType.getKey(), changes.getBefore(), changes.getAfter());
             appendToAuditLog(auditLog);
@@ -299,12 +298,13 @@ public class LicenseModuleFacade {
         ArrayList<ConfiguredDomLicensePresentationType> all = storage.getDomLicensePresentationTypes();
         
         for (ConfiguredDomLicensePresentationType current : all) {
-            if (current.getKey() == presentationName) {
-              return current;
+            log.info("testing presentation name:"+current.getKey());
+            if (current.getKey().equals(presentationName)) {              
+                return current;
             }
         }
         
-        throw new InvalidArgumentServiceException("No ConfiguredDomLicensePresentationType with presenstationname/key:"+presentationName);        
+        throw new InvalidArgumentServiceException("No ConfiguredDomLicensePresentationType with key:"+presentationName);        
     }
     
         
