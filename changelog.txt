@@ -1,3 +1,10 @@
+
+v.4.2:
+All configuration changes will be logged to a new log file in the tomcat/logs folder with name licensemodule_audit.log
+It will log time + IP + changes 
+To match with AD credentials it is require to cross check with the Apache access-log. Apache has AD login/group check on top of the Tomcat. 
+
+
 v.4.1:
 Project updated to follow new guidelines for web projects (ssh://git@sbprojects.statsbiblioteket.dk:7999/ark/java-webapp-template.git)
 Tomcat upgraded to 8.5 - this is a required update for new dependencies.
