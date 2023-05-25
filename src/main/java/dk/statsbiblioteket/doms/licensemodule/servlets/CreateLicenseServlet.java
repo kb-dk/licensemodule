@@ -22,6 +22,7 @@ import dk.statsbiblioteket.doms.licensemodule.persistence.License;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseCache;
 import dk.statsbiblioteket.doms.licensemodule.persistence.LicenseContent;
 import dk.statsbiblioteket.doms.licensemodule.persistence.Presentation;
+import dk.statsbiblioteket.doms.licensemodule.util.IpUtil;
 
 
 public class CreateLicenseServlet extends HttpServlet {
@@ -66,7 +67,7 @@ public class CreateLicenseServlet extends HttpServlet {
 				request.setAttribute("message", "Attributegroup tilføjet");
 				attributeGroups.add(newGroup);		        						
 			}
-			if ("deleteAttributeGroup".equals(event)){
+			else if ("deleteAttributeGroup".equals(event)){
 				int attributeGroupNumber= Integer.parseInt(request.getParameter("attributeGroupNumber"));
 				log.info("Deleting Attributegroup:"+attributeGroupNumber);
 				ArrayList<AttributeGroup> attributeGroups = license.getAttributeGroups();				        		        		        
@@ -107,14 +108,14 @@ public class CreateLicenseServlet extends HttpServlet {
 		        	return;
 		        }
 						        
-		        LicenseModuleFacade.persistLicense(license);
+		        LicenseModuleFacade.persistLicense(IpUtil.getClientIpAddress(request),license);
 				returnConfigurationPage(request, response);
 				return;
 			}
 			else if ("delete".equals(event)){			    				
 				log.info("delete license");		
-				LicenseModuleFacade.persistLicense(license);
-				LicenseModuleFacade.deleteLicense(licenseId, true);
+				//LicenseModuleFacade.persistLicense(license); Why was this here??
+				LicenseModuleFacade.deleteLicense(IpUtil.getClientIpAddress(request),licenseId, true);
 				returnConfigurationPage(request, response);
 				return;
 			}			

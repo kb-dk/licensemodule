@@ -24,4 +24,10 @@ public class Presentation extends Persistent{
 	}
 
 	
+	 @Override
+	    public String toString() {
+	        return key;
+	    }
+
+	
 }
