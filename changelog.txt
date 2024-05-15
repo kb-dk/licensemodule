@@ -1,4 +1,9 @@
 
+v.4.3:
+Ugrade to java11 (and can run under tomcat9)
+Fixed unittest that was due to hardcoded year 2023 which is now exceeded.
+Upgraded postgreSql driver to 42.7.3
+
 v.4.2:
 All configuration changes will be logged to a new log file in the tomcat/logs folder with name licensemodule_audit.log
 It will log time + IP + changes 
