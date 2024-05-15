@@ -442,22 +442,21 @@ public class LicenseModuleStorageTest {
 		ArrayList<License> licenses = LicenseCache.getAllLicense();
 		assertEquals(1, licenses.size());
 
-		// License has validFrom=27-12-2012 and validTo=27-12-2013
-		long testDate = Util.convertDateFormatToLong("26-12-2012");// Before period
-		assertEquals(0, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
+// License has validFrom=27-12-2012 and validTo=27-12-2013
+long testDate = Util.convertDateFormatToLong("26-12-2012");// Before period
+assertEquals(0, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
 
-		testDate = Util.convertDateFormatToLong("27-12-2012");// just valid (start date)
-		assertEquals(1, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
+testDate = Util.convertDateFormatToLong("27-12-2012");// just valid (start date)
+assertEquals(1, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
 
-		testDate = Util.convertDateFormatToLong("26-12-2023");// just valid (last valid date)
-		assertEquals(1, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
+testDate = Util.convertDateFormatToLong("26-12-2023");// just valid (last valid date)
+assertEquals(1, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
 
-		testDate = Util.convertDateFormatToLong("27-12-2023");// just expired
-		assertEquals(0, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
+testDate = Util.convertDateFormatToLong("27-12-2999");// just expired
+assertEquals(0, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
 
-		testDate = Util.convertDateFormatToLong("28-12-2023");// expired (1 day)
-		assertEquals(0, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
-
+testDate = Util.convertDateFormatToLong("28-12-2999");// expired (1 day)
+assertEquals(0, LicenseValidator.filterLicenseByValidDate(licenses, testDate).size());
 	}
 
 	@Test
@@ -479,7 +478,7 @@ public class LicenseModuleStorageTest {
 		license.setDescription_dk("info of hvem licensen vedr. og hvad der er adgang til");
 		license.setDescription_en("engelsk beskrivelse..");
 		license.setValidFrom("27-12-2012");
-		license.setValidTo("27-12-2023");
+		license.setValidTo("27-12-2999");
 
 		ArrayList<AttributeGroup> groups = new ArrayList<AttributeGroup>();
 		AttributeGroup group1 = new AttributeGroup(1);
